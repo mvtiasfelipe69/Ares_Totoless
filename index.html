@@ -5,38 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AresTotoless</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/custom.css">
 </head>
 <body class="pb-5">
 
   <header class="border-bottom sticky-top bg-white">
     <nav class="navbar navbar-expand-md container py-2">
-      <a class="navbar-brand fw-bold me-3" href="#vista-principal">AresTotoless</a>
+      <a class="navbar-brand fw-bold me-3" href="#vista_principal">AresTotoless</a>
       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navPrincipal" aria-controls="navPrincipal" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navPrincipal">
-        <form class="d-flex flex-grow-1 mx-md-4 my-2 my-md-0" role="search" id="form-busqueda">
+        <form class="d-flex flex-grow-1 mx-md-4 my-2 my-md-0" role="search" id="form_busqueda">
           <div class="input-group">
-            <input type="search" class="form-control" id="input-busqueda" placeholder="Buscar canciones, artistas..." aria-label="Buscar" required>
-            <button class="btn btn-outline-secondary" type="submit" id="btn-ejecutar-busqueda">Buscar</button>
+            <input type="search" class="form-control" id="input_busqueda" placeholder="Buscar canciones, artistas..." aria-label="Buscar" required>
+            <button class="btn btn-outline-secondary" type="submit" id="btn_ejecutar_busqueda">Buscar</button>
           </div>
         </form>
 
         <ul class="navbar-nav ms-auto align-items-md-center gap-2">
           <li class="nav-item">
-            <a class="nav-link active" href="#vista-principal">Inicio</a>
+            <a class="nav-link active" href="#vista_principal">Inicio</a>
           </li>
-          <li class="nav-item">
-            <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">
+          
+          <li class="nav-item d-flex align-items-center gap-2" id="bloque_invitado">
+            <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalLogin">
               Iniciar sesión
             </button>
-          </li>
-          <li class="nav-item">
-            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalRegistro">
               Registrarse
+            </button>
+          </li>
+
+          <li class="nav-item d-none align-items-center gap-2" id="bloque_usuario">
+            <span class="small text-secondary">Hola, <strong class="text-dark" id="nombre_usuario_activo">Usuario</strong></span>
+            <button class="btn btn-outline-danger btn-sm" id="btn_cerrar_sesion" type="button">
+              Cerrar sesión
             </button>
           </li>
         </ul>
@@ -45,168 +51,320 @@
   </header>
 
   <main>
-    <section id="vista-principal" class="container-fluid py-4">
+    <section id="vista_principal" class="container-fluid py-4">
       <div class="row">
         <aside class="col-12 col-md-3 col-lg-2 mb-4 mb-md-0">
-          <ul class="nav nav-pills flex-column gap-1" id="menu-lateral">
+          <ul class="nav nav-pills flex-column gap-1" id="menu_lateral">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Tu música</a>
+              <a class="nav-link active" href="#" data-seccion="vista_musica">Tu música</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Playlists</a>
+              <a class="nav-link" href="#" data-seccion="vista_playlists">Playlists</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Explorar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Radio</a>
+              <a class="nav-link" href="#" data-seccion="vista_explorar">Explorar</a>
             </li>
           </ul>
         </aside>
 
         <div class="col-12 col-md-9 col-lg-10">
-          <h1 class="h4 mb-3" id="dashboard-heading">Tu música</h1>
+          <div id="vista_musica" class="panel-contenido">
+            <h1 class="h4 mb-3">Tu música</h1>
 
-          <div class="row row-cols-2 row-cols-md-4 g-3 mb-4" id="grid-playlists">
-            <div class="col">
-              <div class="card h-100 shadow-sm" role="button">
-                <div class="card-body">
-                  <h2 class="h6 card-title mb-1">Favoritos</h2>
-                  <p class="card-text small text-muted mb-0">Canciones guardadas</p>
+            <div class="row row-cols-2 row-cols-md-4 g-3 mb-4" id="grid_playlists">
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">Favoritos</h2>
+                    <p class="card-text small text-muted mb-0">Canciones guardadas</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">Para josear</h2>
+                    <p class="card-text small text-muted mb-0">six seven</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">GYM</h2>
+                    <p class="card-text small text-muted mb-0">redy para farmear</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">kizazo</h2>
+                    <p class="card-text small text-muted mb-0">enfaki</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="card h-100 shadow-sm" role="button">
-                <div class="card-body">
-                  <h2 class="h6 card-title mb-1">Para josear</h2>
-                  <p class="card-text small text-muted mb-0">six seven</p>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0" id="tabla_canciones">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" style="width: 50px;"></th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Artista</th>
+                    <th scope="col">Álbum</th>
+                    <th scope="col" class="text-end">Duración</th>
+                  </tr>
+                </thead>
+                <tbody id="lista_canciones">
+                  <tr data-song_id="1">
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary play_btn" type="button">▶</button>
+                    </td>
+                    <td class="fw-semibold">Canción 1</td>
+                    <td>Banda</td>
+                    <td>Álbum</td>
+                    <td class="text-end">6:66</td>
+                  </tr>
+                  <tr data-song_id="2">
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary play_btn" type="button">▶</button>
+                    </td>
+                    <td class="fw-semibold">Canción 2</td>
+                    <td>Banda</td>
+                    <td>Album</td>
+                    <td class="text-end">6:66</td>
+                  </tr>
+                  <tr data-song_id="3">
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary play_btn" type="button">▶</button>
+                    </td>
+                    <td class="fw-semibold">Canción 3</td>
+                    <td>Banda</td>
+                    <td>Album</td>
+                    <td class="text-end">6:66</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="vista_playlists" class="panel-contenido d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h1 class="h4 mb-0">Playlists</h1>
+              <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalCrearPlaylist">
+                + Crear playlist
+              </button>
+            </div>
+            
+            <div class="row row-cols-2 row-cols-md-4 g-3" id="contenedor_lista_playlists">
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">Favoritos</h2>
+                    <p class="card-text small text-muted mb-0">Canciones guardadas</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col">
-              <div class="card h-100 shadow-sm" role="button">
-                <div class="card-body">
-                  <h2 class="h6 card-title mb-1">GYM</h2>
-                  <p class="card-text small text-muted mb-0">redy para farmear</p>
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">Para josear</h2>
+                    <p class="card-text small text-muted mb-0">six seven</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col">
-              <div class="card h-100 shadow-sm" role="button">
-                <div class="card-body">
-                  <h2 class="h6 card-title mb-1">kizazo</h2>
-                  <p class="card-text small text-muted mb-0">enfaki</p>
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">GYM</h2>
+                    <p class="card-text small text-muted mb-0">redy para farmear</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
+                  <div class="card-body">
+                    <h2 class="h6 card-title mb-1">kizazo</h2>
+                    <p class="card-text small text-muted mb-0">enfaki</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" id="tabla-canciones">
-              <thead class="table-light">
-                <tr>
-                  <th scope="col" style="width: 50px;"></th>
-                  <th scope="col">Título</th>
-                  <th scope="col">Artista</th>
-                  <th scope="col">Álbum</th>
-                  <th scope="col" class="text-end">Duración</th>
-                </tr>
-              </thead>
-              <tbody id="lista-canciones">
-                <tr data-song-id="1">
-                  <td>
-                    <button class="btn btn-sm btn-outline-primary play-btn" type="button">▶</button>
-                  </td>
-                  <td class="fw-semibold">Canción 1</td>
-                  <td>Banda</td>
-                  <td>Álbum</td>
-                  <td class="text-end">6:66</td>
-                </tr>
-                <tr data-song-id="2">
-                  <td>
-                    <button class="btn btn-sm btn-outline-primary play-btn" type="button">▶</button>
-                  </td>
-                  <td class="fw-semibold">Canción 2</td>
-                  <td>Banda</td>
-                  <td>Album</td>
-                  <td class="text-end">6:66</td>
-                </tr>
-                <tr data-song-id="3">
-                  <td>
-                    <button class="btn btn-sm btn-outline-primary play-btn" type="button">▶</button>
-                  </td>
-                  <td class="fw-semibold">Canción 3</td>
-                  <td>Banda</td>
-                  <td>Album</td>
-                  <td class="text-end">6:66</td>
-                </tr>
-              </tbody>
-            </table>
+          <div id="vista_detalle_playlist" class="panel-contenido d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <button class="btn btn-outline-secondary btn-sm" id="btn_volver_playlists" type="button">← Volver</button>
+              <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarCancion">
+                + Añadir canción
+              </button>
+            </div>
+
+            <div class="p-4 bg-light rounded border mb-4">
+              <h1 class="h4 mb-1" id="detalle_playlist_titulo">Nombre Playlist</h1>
+              <p class="text-muted small mb-0" id="detalle_playlist_desc">Descripción</p>
+            </div>
+
+            <div id="mensaje_playlist_vacia" class="border rounded p-4 text-center text-muted">
+              Esta playlist no contiene canciones aún.
+            </div>
+
+            <div class="table-responsive d-none" id="contenedor_tabla_playlist">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" style="width: 50px;"></th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Artista</th>
+                    <th scope="col" class="text-end">Duración</th>
+                  </tr>
+                </thead>
+                <tbody id="lista_canciones_playlist"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="vista_explorar" class="panel-contenido d-none">
+            <h1 class="h4 mb-3">Explorar géneros</h1>
+            <div class="row row-cols-2 row-cols-md-4 g-3">
+              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Rock</div></div>
+              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Urbano</div></div>
+              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Electrónica</div></div>
+              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Pop</div></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <aside class="fixed-bottom bg-dark text-white border-top border-secondary py-2" id="reproductor-barra">
+  <aside class="fixed-bottom bg-dark text-white border-top border-secondary py-2" id="reproductor_barra">
     <div class="container d-flex justify-content-between align-items-center">
       <div class="text-truncate me-3" style="max-width: 250px;">
-        <div class="small fw-bold" id="player-track-name">Sin reproducir</div>
-        <div class="text-secondary small" id="player-artist-name">—</div>
+        <div class="small fw-bold" id="reproductor_nombre_cancion">Sin reproducir</div>
+        <div class="text-secondary small" id="reproductor_nombre_artista">—</div>
       </div>
       
       <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-sm btn-light" id="btn-player-toggle" type="button">▶</button>
+        <button class="btn btn-sm btn-light" id="btn_alternar_reproductor" type="button">▶</button>
       </div>
 
       <div class="d-none d-md-flex align-items-center gap-2 text-secondary small">
-        <span id="player-current-time">0:00</span>
-        <input type="range" class="form-range" id="player-progress" min="0" max="100" value="0" style="width: 150px;">
-        <span id="player-duration">0:00</span>
+        <span id="reproductor_tiempo_actual">0:00</span>
+        <input type="range" class="form-range" id="reproductor_progreso" min="0" max="100" value="0" style="width: 150px;">
+        <span id="reproductor_duracion">0:00</span>
       </div>
     </div>
   </aside>
 
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modalCrearPlaylist" tabindex="-1" aria-labelledby="modalCrearPlaylistLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title fs-5" id="loginModalLabel">Iniciar sesión</h2>
+          <h2 class="modal-title fs-5" id="modalCrearPlaylistLabel">Crear playlist</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="form-login" novalidate>
+          <form id="form_crear_playlist" novalidate>
             <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="loginEmail" placeholder="nombre@correo.com" required>
-              <label for="loginEmail">Correo electrónico</label>
+              <input type="text" class="form-control" id="inputNombrePlaylist" placeholder="Nombre" required>
+              <label for="inputNombrePlaylist">Nombre de la playlist</label>
+              <div class="invalid-feedback">Ingresa un nombre para la playlist.</div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="inputDescPlaylist" placeholder="Descripción">
+              <label for="inputDescPlaylist">Descripción breve</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Crear</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalAgregarCancion" tabindex="-1" aria-labelledby="modalAgregarCancionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modalAgregarCancionLabel">Añadir canción</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <ul class="list-group list-group-flush" id="lista_canciones_disponibles">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+              <div>
+                <div class="fw-semibold">Canción 1</div>
+                <div class="text-muted small">Banda • Álbum (6:66)</div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 1" data-artista="Banda" data-duracion="6:66">
+                Añadir
+              </button>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+              <div>
+                <div class="fw-semibold">Canción 2</div>
+                <div class="text-muted small">Banda • Album (6:66)</div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 2" data-artista="Banda" data-duracion="6:66">
+                Añadir
+              </button>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+              <div>
+                <div class="fw-semibold">Canción 3</div>
+                <div class="text-muted small">Banda • Album (6:66)</div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 3" data-artista="Banda" data-duracion="6:66">
+                Añadir
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modalLoginLabel">Iniciar sesión</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form_login" novalidate>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="loginCorreo" placeholder="nombre@correo.com" required>
+              <label for="loginCorreo">Correo electrónico</label>
               <div class="invalid-feedback">Ingresa un correo válido.</div>
             </div>
             <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="loginPassword" placeholder="Contraseña" minlength="6" required>
-              <label for="loginPassword">Contraseña</label>
+              <input type="password" class="form-control" id="loginContrasena" placeholder="Contraseña" minlength="6" required>
+              <label for="loginContrasena">Contraseña</label>
               <div class="invalid-feedback">Ingresa tu contraseña.</div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Ingresar</button>
           </form>
           <p class="text-center small text-muted mt-3 mb-0">
             ¿No tienes cuenta? 
-            <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</button>
+            <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="modal" data-bs-target="#modalRegistro">Regístrate</button>
           </p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title fs-5" id="registerModalLabel">Crear cuenta</h2>
+          <h2 class="modal-title fs-5" id="modalRegistroLabel">Crear cuenta</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="form-registro" novalidate>
+          <form id="form_registro" novalidate>
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="regNombre" placeholder="Nombre completo" required>
               <label for="regNombre">Nombre completo</label>
@@ -218,20 +376,20 @@
               <div class="invalid-feedback">Ingresa un correo válido.</div>
             </div>
             <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="regPassword" placeholder="Contraseña" minlength="6" required>
-              <label for="regPassword">Contraseña</label>
+              <input type="password" class="form-control" id="regContrasena" placeholder="Contraseña" minlength="6" required>
+              <label for="regContrasena">Contraseña</label>
               <div class="invalid-feedback">Mínimo 6 caracteres.</div>
             </div>
             <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="regConfirmPassword" placeholder="Confirmar contraseña" minlength="6" required>
-              <label for="regConfirmPassword">Confirmar contraseña</label>
+              <input type="password" class="form-control" id="regConfirmarContrasena" placeholder="Confirmar contraseña" minlength="6" required>
+              <label for="regConfirmarContrasena">Confirmar contraseña</label>
               <div class="invalid-feedback">Las contraseñas no coinciden.</div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
           </form>
           <p class="text-center small text-muted mt-3 mb-0">
             ¿Ya tienes cuenta? 
-            <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Inicia sesión</button>
+            <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="modal" data-bs-target="#modalLogin">Inicia sesión</button>
           </p>
         </div>
       </div>
