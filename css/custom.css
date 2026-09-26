@@ -1,91 +1,140 @@
-/* estilo general del body */
 body {
-  background-color: black;
-  color: white;
-  min-width: 960px;
+  background-color: #121212;
+  color: #ffffff;
 }
 
-/* estilo de los links del menu de navegacion superior (antes temp1) */
-.navbar-nav a {
-  background: transparent;
-  color: white;
+header {
+  background-color: #181818 !important;
+  border-color: #282828 !important;
 }
 
-/* fondo y texto barra lateral (antes temp3) */
-#menu-lateral {
-  background: gray;
-  color: lightgray;
-  text-align: center;
-}
-
-/* tamaño de texto del sidebar */
-#menu-lateral li {
-  font-size: 12px;
-}
-
-/* espacio inferior de los links del sidebar */
-#menu-lateral li a {
-  padding-bottom: 15px;
-}
-
-/* efecto al pasar el mouse en el sidebar */
-#menu-lateral li a:hover {
-  color: white;
-  border-left: 3px solid green;
-}
-
-/* logo dentro del header (antes temp4) */
 .navbar-brand {
-  color: white;
-  font-size: 20px;
+  color: #ffffff !important;
+  font-size: 1.25rem;
 }
 
-/* estilo del menu superior (antes temp5) */
 .navbar-nav {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.navbar-nav .nav-link {
+  color: #b3b3b3 !important;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #ffffff !important;
+  border-bottom: 2px solid #1db954;
+}
+
+#menu_lateral {
+  font-size: 0.85rem;
+}
+
+#menu_lateral .nav-link {
+  color: #b3b3b3;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#menu_lateral .nav-link:hover {
+  color: #ffffff;
+  background-color: #282828;
+  border-left: 3px solid #1db954;
+}
+
+#menu_lateral .nav-link.active {
+  background-color: #1db954 !important;
+  color: #ffffff !important;
+}
+
+.card {
+  background-color: #181818;
+  border-color: #282828;
+  color: #ffffff;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.card:hover {
+  background-color: #222222;
+  transform: translateY(-2px);
+}
+
+.card .text-muted {
+  color: #a0a0a0 !important;
+}
+
+#tabla_canciones {
+  color: #ffffff;
+  font-size: 0.9rem;
+  border-color: #282828;
+}
+
+#tabla_canciones thead th {
   text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #b3b3b3;
+  background-color: #181818;
+  border-bottom-color: #282828;
 }
 
-/* efecto al pasar el mouse sobre un item del menu superior */
-.navbar-nav li a:hover {
-  border-bottom: 2px solid green;
-  color: white;
+#tabla_canciones tbody tr {
+  border-color: #282828;
+  transition: background-color 0.15s ease;
 }
 
-/* estilo de la tabla de canciones (antes temp7) */
-#tabla-canciones {
-  color: white;
-  border-color: gray;
-  font-size: 12px;
+#tabla_canciones tbody tr:hover,
+#tabla_canciones tbody tr.table-active {
+  background-color: #282828 !important;
+  color: #ffffff;
 }
 
-/* efecto al pasar el mouse sobre una fila de la tabla */
-#tabla-canciones tbody tr:hover {
-  background-color: gray;
+.play_btn {
+  font-size: 0.8rem;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-color: #1db954;
+  color: #1db954;
 }
 
-/* estilo de los encabezados de la tabla */
-#tabla-canciones thead th {
-  text-transform: uppercase;
-  color: lightgray;
-  font-weight: normal;
+.play_btn:hover {
+  background-color: #1db954;
+  border-color: #1db954;
+  color: #ffffff;
 }
 
-/* boton de "play", oculto por defecto (antes temp8) */
-.play-btn {
-  color: transparent;
-  font-size: 12px;
-  border: none;
-  background: transparent;
+.modal-content {
+  background-color: #181818;
+  color: #ffffff;
+  border: 1px solid #282828;
 }
 
-/* el boton de play se hace visible al pasar el mouse sobre la fila */
-#tabla-canciones tr:hover .play-btn {
-  color: white;
+.modal-header,
+.modal-footer {
+  border-color: #282828;
 }
 
-/* texto secundario dentro de la tabla, ej artista/album (antes temp9) */
-.info-secundaria {
-  color: lightgray;
+.form-floating input.form-control {
+  background-color: #242424;
+  border-color: #333333;
+  color: #ffffff;
+}
+
+.form-floating input.form-control:focus {
+  background-color: #282828;
+  color: #ffffff;
+  border-color: #1db954;
+  box-shadow: 0 0 0 0.25rem rgba(29, 185, 84, 0.25);
+}
+
+.form-floating label {
+  color: #a0a0a0;
 }

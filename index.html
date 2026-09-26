@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 </head>
 <body class="pb-5">
 
-  <header class="border-bottom sticky-top bg-white">
+  <header class="border-bottom sticky-top">
     <nav class="navbar navbar-expand-md container py-2">
       <a class="navbar-brand fw-bold me-3" href="#vista_principal">AresTotoless</a>
       
@@ -40,7 +40,7 @@
           </li>
 
           <li class="nav-item d-none align-items-center gap-2" id="bloque_usuario">
-            <span class="small text-secondary">Hola, <strong class="text-dark" id="nombre_usuario_activo">Usuario</strong></span>
+            <span class="small text-secondary">Hola, <strong class="text-light" id="nombre_usuario_activo">Usuario</strong></span>
             <button class="btn btn-outline-danger btn-sm" id="btn_cerrar_sesion" type="button">
               Cerrar sesión
             </button>
@@ -108,7 +108,7 @@
 
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tabla_canciones">
-                <thead class="table-light">
+                <thead>
                   <tr>
                     <th scope="col" style="width: 50px;"></th>
                     <th scope="col">Título</th>
@@ -202,18 +202,18 @@
               </button>
             </div>
 
-            <div class="p-4 bg-light rounded border mb-4">
+            <div class="p-4 bg-dark rounded border border-secondary mb-4">
               <h1 class="h4 mb-1" id="detalle_playlist_titulo">Nombre Playlist</h1>
               <p class="text-muted small mb-0" id="detalle_playlist_desc">Descripción</p>
             </div>
 
-            <div id="mensaje_playlist_vacia" class="border rounded p-4 text-center text-muted">
+            <div id="mensaje_playlist_vacia" class="border border-secondary rounded p-4 text-center text-muted">
               Esta playlist no contiene canciones aún.
             </div>
 
             <div class="table-responsive d-none" id="contenedor_tabla_playlist">
               <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+                <thead>
                   <tr>
                     <th scope="col" style="width: 50px;"></th>
                     <th scope="col">Título</th>
@@ -229,10 +229,10 @@
           <div id="vista_explorar" class="panel-contenido d-none">
             <h1 class="h4 mb-3">Explorar géneros</h1>
             <div class="row row-cols-2 row-cols-md-4 g-3">
-              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Rock</div></div>
-              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Urbano</div></div>
-              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Electrónica</div></div>
-              <div class="col"><div class="p-4 bg-light rounded text-center fw-bold shadow-sm" role="button">Pop</div></div>
+              <div class="col"><div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Rock</div></div>
+              <div class="col"><div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Urbano</div></div>
+              <div class="col"><div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Electrónica</div></div>
+              <div class="col"><div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Pop</div></div>
             </div>
           </div>
         </div>
@@ -293,28 +293,28 @@
         </div>
         <div class="modal-body p-0">
           <ul class="list-group list-group-flush" id="lista_canciones_disponibles">
-            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent text-light border-secondary">
               <div>
                 <div class="fw-semibold">Canción 1</div>
-                <div class="text-muted small">Banda • Álbum (6:66)</div>
+                <div class="text-secondary small">Banda • Álbum (6:66)</div>
               </div>
               <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 1" data-artista="Banda" data-duracion="6:66">
                 Añadir
               </button>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent text-light border-secondary">
               <div>
                 <div class="fw-semibold">Canción 2</div>
-                <div class="text-muted small">Banda • Album (6:66)</div>
+                <div class="text-secondary small">Banda • Album (6:66)</div>
               </div>
               <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 2" data-artista="Banda" data-duracion="6:66">
                 Añadir
               </button>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent text-light border-secondary">
               <div>
                 <div class="fw-semibold">Canción 3</div>
-                <div class="text-muted small">Banda • Album (6:66)</div>
+                <div class="text-secondary small">Banda • Album (6:66)</div>
               </div>
               <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 3" data-artista="Banda" data-duracion="6:66">
                 Añadir
