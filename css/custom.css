@@ -1,0 +1,91 @@
+/* estilo general del body */
+body {
+  background-color: black;
+  color: white;
+  min-width: 960px;
+}
+
+/* estilo de los links del menu de navegacion superior (antes temp1) */
+.navbar-nav a {
+  background: transparent;
+  color: white;
+}
+
+/* fondo y texto barra lateral (antes temp3) */
+#menu-lateral {
+  background: gray;
+  color: lightgray;
+  text-align: center;
+}
+
+/* tamaño de texto del sidebar */
+#menu-lateral li {
+  font-size: 12px;
+}
+
+/* espacio inferior de los links del sidebar */
+#menu-lateral li a {
+  padding-bottom: 15px;
+}
+
+/* efecto al pasar el mouse en el sidebar */
+#menu-lateral li a:hover {
+  color: white;
+  border-left: 3px solid green;
+}
+
+/* logo dentro del header (antes temp4) */
+.navbar-brand {
+  color: white;
+  font-size: 20px;
+}
+
+/* estilo del menu superior (antes temp5) */
+.navbar-nav {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* efecto al pasar el mouse sobre un item del menu superior */
+.navbar-nav li a:hover {
+  border-bottom: 2px solid green;
+  color: white;
+}
+
+/* estilo de la tabla de canciones (antes temp7) */
+#tabla-canciones {
+  color: white;
+  border-color: gray;
+  font-size: 12px;
+}
+
+/* efecto al pasar el mouse sobre una fila de la tabla */
+#tabla-canciones tbody tr:hover {
+  background-color: gray;
+}
+
+/* estilo de los encabezados de la tabla */
+#tabla-canciones thead th {
+  text-transform: uppercase;
+  color: lightgray;
+  font-weight: normal;
+}
+
+/* boton de "play", oculto por defecto (antes temp8) */
+.play-btn {
+  color: transparent;
+  font-size: 12px;
+  border: none;
+  background: transparent;
+}
+
+/* el boton de play se hace visible al pasar el mouse sobre la fila */
+#tabla-canciones tr:hover .play-btn {
+  color: white;
+}
+
+/* texto secundario dentro de la tabla, ej artista/album (antes temp9) */
+.info-secundaria {
+  color: lightgray;
+}
