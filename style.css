@@ -1,0 +1,118 @@
+/* estilo general del body */
+body {
+background-color: black;
+color: white;
+min-width: 960px;
+}
+
+/* estilo de los links dentro del menu de navegacion (temp1: clase del contenedor del menu de navegacion) */
+.temp1 a {
+background: transparent;
+color: white;
+}
+
+/* centrado de los iconos (temp2: iconos) */
+.temp2 {
+text-align: center;
+}
+
+/* fondo y texto barra lateral (temp3: clase de la barra lateral) */
+.temp3 {
+background: gray;
+color: lightgray;
+text-align: center;
+}
+
+/* esto quita el margen de la barra lateral */
+.temp3 .navbar {
+margin-bottom: 0;
+}
+
+/* tamaño de texto del sidebar */
+.temp3 li {
+font-size: 12px;
+}
+
+/* espacio inferior de los links del sidebar */
+.temp3 li a {
+padding-bottom: 15px;
+}
+
+/* efecto al pasar el mouse en el sidebar */
+.temp3 li a:hover {
+color: white;
+border-left: 3px solid green;
+}
+
+/* tamaño y separacion de los iconos dentro del sidebar */
+.temp3 .temp2 {
+font-size: 30px;
+margin-bottom: 10px;
+display: block;
+}
+
+/* icono del logo dentro del sidebar (temp4: clase del logo) */
+.temp3 .temp4 .temp2 {
+font-size: 50px;
+color: white;
+}
+
+/* estilo del menu superior (temp5: clase del contenedor header) */
+.temp5 {
+text-transform: uppercase;
+font-size: 12px;
+font-weight: bold;
+color: white;
+}
+
+/* efecto al pasar el mouse sobre un item del menu superior */
+.temp5 li a:hover {
+border-bottom: 2px solid green;
+color: white;
+}
+
+/* clase utilitaria para quitar padding (temp6: clase padding) */
+.temp6 {
+padding: 0;
+}
+
+/* estilo de la tabla de canciones (temp7: clase de la tabla) */
+.temp7 {
+color: white;
+border-color: gray;
+font-size: 12px;
+}
+
+/* efecto al pasar el mouse sobre una fila de la tabla */
+.temp7 tbody tr:hover {
+background-color: gray;
+}
+
+/* estilo de los encabezados de la tabla */
+.temp7 thead th {
+text-transform: uppercase;
+color: lightgray;
+font-weight: normal;
+}
+
+/* altura y scroll para el cuerpo de la tabla */
+.temp7 tbody {
+height: 200px;
+overflow: scroll;
+}
+
+/* boton de "play" invisible (temp8: clase del boton de play dentro de cada fila */
+.temp7 .temp8 {
+color: transparent;
+font-size: 12px;
+}
+
+/* texto dentro de la tabla, ej artista/album (temp9: clase del texto secundario dentro de la fila) */
+.temp7 .temp9 {
+color: lightgray;
+}
+
+/* el boton de play se hace visible al pasar el mouse sobre la fila */
+.temp7 tr:hover .temp8 {
+color: white;
+}
