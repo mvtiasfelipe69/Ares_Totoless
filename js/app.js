@@ -37,23 +37,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function vincularBotonesReproduccion(contenedor) {
-    contenedor.querySelectorAll('.play_btn').forEach((botonPlay) => {
-      botonPlay.onclick = () => {
-        const fila = botonPlay.closest('tr');
-        const id = fila.dataset.song_id;
-        if (idCancionActual === id) {
-          estaReproduciendo = !estaReproduciendo;
-        } else {
-          idCancionActual = id;
-          estaReproduciendo = true;
-        }
-        actualizarInterfazReproductor();
-      };
-    });
-  }
+document.addEventListener('click', (e) => {
+  const botonPlay = e.target.closest('.play_btn');
+  if (!botonPlay) return;
+  const id = botonPlay.closest('tr')?.dataset.song_id;
+  if (!id) return;
 
-  vincularBotonesReproduccion(document.getElementById('tabla_canciones'));
+  if (idCancionActual === id) {
+    estaReproduciendo = !estaReproduciendo;
+  } else {
+    idCancionActual = id;
+    estaReproduciendo = true;
+  }
+  actualizarInterfazReproductor();
+});
 
   botonAlternar.addEventListener('click', () => {
     if (!idCancionActual) return;
@@ -61,25 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarInterfazReproductor();
   });
 
-  const formularioBusqueda = document.getElementById('form_busqueda');
-  const entradaBusqueda = document.getElementById('input_busqueda');
-  const filasCanciones = document.querySelectorAll('#lista_canciones tr');
-
-  function filtrarCanciones() {
-    const termino = entradaBusqueda.value.trim().toLowerCase();
-    filasCanciones.forEach((fila) => {
-      const titulo = fila.children[1].textContent.toLowerCase();
-      const artista = fila.children[2].textContent.toLowerCase();
-      const coincide = titulo.includes(termino) || artista.includes(termino);
-      fila.classList.toggle('d-none', termino !== '' && !coincide);
-    });
-  }
-
-  entradaBusqueda.addEventListener('input', filtrarCanciones);
-  formularioBusqueda.addEventListener('submit', (e) => {
-    e.preventDefault();
-    filtrarCanciones();
-  });
+  document.getElementById('form_busqueda').addEventListener('submit', (e) => e.preventDefault());
 
   const tituloDetalle = document.getElementById('detalle_playlist_titulo');
   const descDetalle = document.getElementById('detalle_playlist_desc');
@@ -109,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         cuerpoTablaPlaylist.appendChild(fila);
       });
-      vincularBotonesReproduccion(cuerpoTablaPlaylist);
     }
   }
 
