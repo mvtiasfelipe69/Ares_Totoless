@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   let idCancionActual = null;
   let estaReproduciendo = false;
-  let seccionPrevia = 'vista_musica';
   let playlistSeleccionada = null;
 
   const datosPlaylists = {
@@ -82,33 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
     filtrarCanciones();
   });
 
-  const enlacesMenu = document.querySelectorAll('#menu_lateral .nav-link');
-  const paneles = document.querySelectorAll('.panel-contenido');
-
-  function cambiarSeccion(targetId) {
-    if (targetId !== 'vista_detalle_playlist') {
-      seccionPrevia = targetId;
-    }
-
-    paneles.forEach((panel) => {
-      panel.classList.toggle('d-none', panel.id !== targetId);
-    });
-
-    enlacesMenu.forEach((enlace) => {
-      enlace.classList.toggle('active', enlace.dataset.seccion === targetId);
-    });
-  }
-
-  enlacesMenu.forEach((enlace) => {
-    enlace.addEventListener('click', (e) => {
-      e.preventDefault();
-      cambiarSeccion(enlace.dataset.seccion);
-    });
-  });
-
   const tituloDetalle = document.getElementById('detalle_playlist_titulo');
   const descDetalle = document.getElementById('detalle_playlist_desc');
-  const btnVolver = document.getElementById('btn_volver_playlists');
   const mensajeVacio = document.getElementById('mensaje_playlist_vacia');
   const contenedorTabla = document.getElementById('contenedor_tabla_playlist');
   const cuerpoTablaPlaylist = document.getElementById('lista_canciones_playlist');
@@ -153,19 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
       descDetalle.textContent = desc;
 
       cargarCancionesPlaylist(titulo);
-      cambiarSeccion('vista_detalle_playlist');
       
-      enlacesMenu.forEach((enlace) => {
-        enlace.classList.toggle('active', enlace.dataset.seccion === 'vista_playlists');
-      });
+      window.location.hash = '#playlist';
     });
   }
 
   document.querySelectorAll('.tarjeta-playlist').forEach(registrarEventoTarjeta);
-
-  btnVolver.addEventListener('click', () => {
-    cambiarSeccion(seccionPrevia);
-  });
 
   const modalAgregarCancionEl = document.getElementById('modalAgregarCancion');
   const botonesAgregarItem = document.querySelectorAll('.btn-agregar-item');
@@ -277,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   formularioRegistro.addEventListener('submit', (e) => {
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation()
     validarContrasenas();
     formularioRegistro.classList.add('was-validated');
     if (formularioRegistro.checkValidity()) {
