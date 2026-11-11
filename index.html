@@ -6,12 +6,13 @@
   <title>AresTotoless</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/custom.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="pb-5">
 
   <header class="border-bottom sticky-top">
     <nav class="navbar navbar-expand-md container py-2">
-      <a class="navbar-brand fw-bold me-3" href="#vista_principal">AresTotoless</a>
+      <a class="navbar-brand fw-bold me-3" href="#vista_musica">AresTotoless</a>
       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navPrincipal" aria-controls="navPrincipal" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,7 +28,7 @@
 
         <ul class="navbar-nav ms-auto align-items-md-center gap-2">
           <li class="nav-item">
-            <a class="nav-link active" href="#vista_principal">Inicio</a>
+            <a class="nav-link active" href="#vista_musica">Inicio</a>
           </li>
           
           <li class="nav-item d-flex align-items-center gap-2" id="bloque_invitado">
@@ -49,26 +50,31 @@
       </div>
     </nav>
   </header>
-
-  <main>
+  
+  <!-- [IA] inicio ia/2026-11-11_matias_router-hash.md -->
+  <main x-data="{ ruta: window.location.hash || '#vista_musica' }" @hashchange.window="ruta = window.location.hash || '#vista_musica'">
     <section id="vista_principal" class="container-fluid py-4">
       <div class="row">
+        <!-- Menú lateral gestionado por Alpine.js -->
         <aside class="col-12 col-md-3 col-lg-2 mb-4 mb-md-0">
           <ul class="nav nav-pills flex-column gap-1" id="menu_lateral">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-seccion="vista_musica">Tu música</a>
+              <a class="nav-link" :class="{ 'active': ruta === '#vista_musica' }" href="#vista_musica">Tu música</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-seccion="vista_playlists">Playlists</a>
+              <a class="nav-link" :class="{ 'active': ruta === '#vista_playlists' || ruta.startsWith('#playlist') }" href="#vista_playlists">Playlists</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-seccion="vista_explorar">Explorar</a>
+              <a class="nav-link" :class="{ 'active': ruta === '#vista_explorar' }" href="#vista_explorar">Explorar</a>
             </li>
           </ul>
         </aside>
 
+        <!-- Contenedor principal de vistas -->
         <div class="col-12 col-md-9 col-lg-10">
-          <div id="vista_musica" class="panel-contenido">
+          
+          <!-- VISTA: TU MÚSICA -->
+          <div id="vista_musica" class="panel-contenido" x-show="ruta === '#vista_musica'">
             <h1 class="h4 mb-3">Tu música</h1>
 
             <div class="row row-cols-2 row-cols-md-4 g-3 mb-4" id="grid_playlists">
@@ -150,7 +156,8 @@
             </div>
           </div>
 
-          <div id="vista_playlists" class="panel-contenido d-none">
+          <!-- VISTA: PLAYLISTS -->
+          <div id="vista_playlists" class="panel-contenido" x-show="ruta === '#vista_playlists'" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h1 class="h4 mb-0">Playlists</h1>
               <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalCrearPlaylist">
@@ -194,9 +201,10 @@
             </div>
           </div>
 
-          <div id="vista_detalle_playlist" class="panel-contenido d-none">
+          <!-- VISTA: DETALLE PLAYLIST -->
+          <div id="vista_detalle_playlist" class="panel-contenido" x-show="ruta.startsWith('#playlist')" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <button class="btn btn-outline-secondary btn-sm" id="btn_volver_playlists" type="button">← Volver</button>
+              <a href="#vista_playlists" class="btn btn-outline-secondary btn-sm" id="btn_volver_playlists">← Volver</a>
               <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarCancion">
                 + Añadir canción
               </button>
@@ -226,7 +234,8 @@
             </div>
           </div>
 
-          <div id="vista_explorar" class="panel-contenido d-none">
+          <!-- VISTA: EXPLORAR -->
+          <div id="vista_explorar" class="panel-contenido" x-show="ruta === '#vista_explorar'" style="display: none;">
             <h1 class="h4 mb-3">Explorar géneros</h1>
             <div class="row row-cols-2 row-cols-md-4 g-3">
               <div class="col"><div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Rock</div></div>
@@ -235,10 +244,13 @@
               <div class="col"><div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Pop</div></div>
             </div>
           </div>
+          <!-- [IA] fin -->
+
         </div>
       </div>
     </section>
   </main>
+
 
   <aside class="fixed-bottom bg-dark text-white border-top border-secondary py-2" id="reproductor_barra">
     <div class="container d-flex justify-content-between align-items-center">
