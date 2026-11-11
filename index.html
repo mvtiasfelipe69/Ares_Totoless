@@ -50,7 +50,7 @@
       </div>
     </nav>
   </header>
-  
+
   <!-- [IA] inicio ia/2026-11-11_matias_router-hash.md -->
   <main x-data="{ ruta: window.location.hash || '#vista_musica' }" @hashchange.window="ruta = window.location.hash || '#vista_musica'">
     <section id="vista_principal" class="container-fluid py-4">
@@ -246,6 +246,12 @@
           </div>
           <!-- [IA] fin -->
 
+          <div id="vista_404" class="panel-contenido text-center py-5" x-show="!['#vista_musica', '#vista_playlists', '#vista_explorar'].includes(ruta) && !ruta.startsWith('#playlist')" style="display: none;">
+            <h1 class="display-1 fw-bold text-secondary">404</h1>
+            <p class="lead">Página no encontrada</p>
+            <a href="#vista_musica" class="btn btn-primary mt-3">Volver al inicio</a>
+          </div>
+          
         </div>
       </div>
     </section>
