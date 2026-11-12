@@ -187,65 +187,10 @@ document.addEventListener('click', (e) => {
     }
   });
 
-  const bloqueInvitado = document.getElementById('bloque_invitado');
-  const bloqueUsuario = document.getElementById('bloque_usuario');
-  const nombreUsuarioActivo = document.getElementById('nombre_usuario_activo');
-  const btnCerrarSesion = document.getElementById('btn_cerrar_sesion');
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_formularios-toasts.md
+  // El login y el registro ahora viven en js/formularios.js (componentes Alpine).
+  // [IA] fin
 
-  function iniciarSesionUsuario(nombre) {
-    nombreUsuarioActivo.textContent = nombre;
-    bloqueInvitado.classList.add('d-none');
-    bloqueInvitado.classList.remove('d-flex');
-    bloqueUsuario.classList.remove('d-none');
-    bloqueUsuario.classList.add('d-flex');
-  }
-  btnCerrarSesion.addEventListener('click', () => {
-    bloqueUsuario.classList.add('d-none');
-    bloqueUsuario.classList.remove('d-flex');
-    bloqueInvitado.classList.remove('d-none');
-    bloqueInvitado.classList.add('d-flex');
-  });
-
-  const formularioLogin = document.getElementById('form_login');
-  formularioLogin.addEventListener('submit', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    formularioLogin.classList.add('was-validated');
-    if (formularioLogin.checkValidity()) {
-      const email = document.getElementById('loginCorreo').value;
-      const nombreVisible = email.split('@')[0];
-      iniciarSesionUsuario(nombreVisible);
-      cerrarModalYResetear(formularioLogin);
-    }
-  });
-  const formularioRegistro = document.getElementById('form_registro');
-  const regContrasena = document.getElementById('regContrasena');
-  const regConfirmarContrasena = document.getElementById('regConfirmarContrasena');
-  function validarContrasenas() 
-  {
-    if (regConfirmarContrasena.value && regConfirmarContrasena.value !== regContrasena.value)
-    {
-      regConfirmarContrasena.setCustomValidity('Las contraseñas no coinciden');
-    } 
-    else 
-    {
-      regConfirmarContrasena.setCustomValidity('');
-    }
-  }
-  regContrasena.addEventListener('input', validarContrasenas);
-  regConfirmarContrasena.addEventListener('input', validarContrasenas);
-  formularioRegistro.addEventListener('submit', (e) => 
-    {
-    e.preventDefault();
-    e.stopPropagation()
-    validarContrasenas();
-    formularioRegistro.classList.add('was-validated');
-    if (formularioRegistro.checkValidity()) {
-      const nombre = document.getElementById('regNombre').value;
-      iniciarSesionUsuario(nombre);
-      cerrarModalYResetear(formularioRegistro);
-    }
-  });
   function inicializarAuth() {
     let form = document.getElementById('form-login');
     if (form) 
@@ -378,4 +323,10 @@ document.addEventListener('click', (e) => {
           db[i].canciones.push(cancion);
           localStorage.setItem('playlistsDB', JSON.stringify(db));
         }
+      // [IA] inicio · ia/2026-11-12_yisuscrist67_formularios-toasts.md
+      // Faltaban estas 3 llaves de cierre (if, for y función): sin ellas app.js no corría.
+      }
+    }
+  }
+  // [IA] fin
 });
