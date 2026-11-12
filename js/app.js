@@ -172,75 +172,9 @@ document.addEventListener('click', (e) => {
     }
   });
 
-  // [IA] inicio · ia/2026-11-12_yisuscrist67_sesion.md
-  // Login y registro: validan el formulario, consultan la API simulada y,
-  // si responde ok, entregan el usuario a Alpine.store('sesion').
-  const sesion = () => Alpine.store('sesion');
-
-  // Envía un formulario de autenticación. `llamada` devuelve la promesa de la API.
-  async function enviarAutenticacion(formulario, cajaError, llamada) {
-    const boton = formulario.querySelector('button[type="submit"]');
-    cajaError.classList.add('d-none');
-    boton.disabled = true;
-    let res;
-    try {
-      res = await llamada();
-    } catch {
-      res = { ok: false, error: 'No se pudo conectar con el servidor.' };
-    }
-    boton.disabled = false;
-
-    if (!res.ok) {
-      cajaError.textContent = res.error || 'No se pudo iniciar sesión.';
-      cajaError.classList.remove('d-none');
-      return;
-    }
-    cerrarModalYResetear(formulario);
-    sesion().iniciar(res.data);
-  }
-
-  const formularioLogin = document.getElementById('form_login');
-  const errorLogin = document.getElementById('login_error');
-  formularioLogin.addEventListener('submit', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    formularioLogin.classList.add('was-validated');
-    if (!formularioLogin.checkValidity()) return;
-
-    const correo = document.getElementById('loginCorreo').value.trim();
-    const contrasena = document.getElementById('loginContrasena').value;
-    enviarAutenticacion(formularioLogin, errorLogin, () => api.login({ correo, password: contrasena }));
-  });
-
-  const formularioRegistro = document.getElementById('form_registro');
-  const errorRegistro = document.getElementById('registro_error');
-  const regContrasena = document.getElementById('regContrasena');
-  const regConfirmarContrasena = document.getElementById('regConfirmarContrasena');
-
-  function validarContrasenas() {
-    if (regConfirmarContrasena.value && regConfirmarContrasena.value !== regContrasena.value) {
-      regConfirmarContrasena.setCustomValidity('Las contraseñas no coinciden');
-    } else {
-      regConfirmarContrasena.setCustomValidity('');
-    }
-  }
-
-  regContrasena.addEventListener('input', validarContrasenas);
-  regConfirmarContrasena.addEventListener('input', validarContrasenas);
-
-  formularioRegistro.addEventListener('submit', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    validarContrasenas();
-    formularioRegistro.classList.add('was-validated');
-    if (!formularioRegistro.checkValidity()) return;
-
-    const datos = {
-      nombre: document.getElementById('regNombre').value.trim(),
-      correo: document.getElementById('regEmail').value.trim(),
-      password: regContrasena.value,
-    };
-    enviarAutenticacion(formularioRegistro, errorRegistro, () => api.registrar(datos));
-  });
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_arreglo-formularios.md
+  // Login y registro viven en js/formularios.js (Alpine.data 'formLogin' y 'formRegistro').
+  // Aquí no se registra ningún submit para #form_login ni #form_registro: si se hiciera,
+  // cada envío llamaría dos veces a la API.
   // [IA] fin
 });

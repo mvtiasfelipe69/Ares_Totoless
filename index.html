@@ -696,30 +696,44 @@
     </div>
   </div>
 
-  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+  <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_arreglo-formularios.md -->
+  <!-- Modales de login/registro como componentes Alpine (js/formularios.js) y toasts globales (js/toasts.js). -->
+  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true"
+    x-data="formLogin">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title fs-5" id="modalLoginLabel">Iniciar sesión</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="form_login" novalidate>
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="loginCorreo" placeholder="nombre@correo.com" required>
-              <label for="loginCorreo">Correo electrónico</label>
-              <div class="invalid-feedback">Ingresa un correo válido.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="loginContrasena" placeholder="Contraseña" minlength="6"
-                required>
-              <label for="loginContrasena">Contraseña</label>
-              <div class="invalid-feedback">Ingresa tu contraseña.</div>
-            </div>
-            <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_sesion.md -->
-            <div class="alert alert-danger py-2 small d-none" id="login_error" role="alert"></div>
-            <!-- [IA] fin -->
-            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+          <form id="form_login" novalidate @submit.prevent="enviar()">
+            <fieldset :disabled="enviando || exito !== ''">
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="loginCorreo" placeholder="nombre@correo.com"
+                  autocomplete="email" x-model="campos.correo" :class="clase('correo')"
+                  @blur="tocar('correo')" @input="revisar('correo')" aria-describedby="loginCorreoError">
+                <label for="loginCorreo">Correo electrónico</label>
+                <div class="invalid-feedback" id="loginCorreoError" x-text="errores.correo"></div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="loginContrasena" placeholder="Contraseña"
+                  autocomplete="current-password" x-model="campos.password" :class="clase('password')"
+                  @blur="tocar('password')" @input="revisar('password')" aria-describedby="loginContrasenaError">
+                <label for="loginContrasena">Contraseña</label>
+                <div class="invalid-feedback" id="loginContrasenaError" x-text="errores.password"></div>
+              </div>
+            </fieldset>
+
+            <div class="alert alert-danger py-2 small" id="login_error" role="alert" x-show="errorGeneral"
+              x-text="errorGeneral"></div>
+            <div class="alert alert-success py-2 small" id="login_exito" role="status" x-show="exito"
+              x-text="exito"></div>
+
+            <button type="submit" class="btn btn-primary w-100" :disabled="enviando || exito !== ''">
+              <span x-show="enviando" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              <span x-text="enviando ? 'Ingresando…' : 'Ingresar'">Ingresar</span>
+            </button>
           </form>
           <p class="text-center small text-muted mt-3 mb-0">
             ¿No tienes cuenta?
@@ -731,41 +745,57 @@
     </div>
   </div>
 
-  <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+  <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true"
+    x-data="formRegistro">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title fs-5" id="modalRegistroLabel">Crear cuenta</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="form_registro" novalidate>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="regNombre" placeholder="Nombre completo" required>
-              <label for="regNombre">Nombre completo</label>
-              <div class="invalid-feedback">Ingresa tu nombre.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="regEmail" placeholder="nombre@correo.com" required>
-              <label for="regEmail">Correo electrónico</label>
-              <div class="invalid-feedback">Ingresa un correo válido.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="regContrasena" placeholder="Contraseña" minlength="6"
-                required>
-              <label for="regContrasena">Contraseña</label>
-              <div class="invalid-feedback">Mínimo 6 caracteres.</div>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="regConfirmarContrasena" placeholder="Confirmar contraseña"
-                minlength="6" required>
-              <label for="regConfirmarContrasena">Confirmar contraseña</label>
-              <div class="invalid-feedback">Las contraseñas no coinciden.</div>
-            </div>
-            <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_sesion.md -->
-            <div class="alert alert-danger py-2 small d-none" id="registro_error" role="alert"></div>
-            <!-- [IA] fin -->
-            <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
+          <form id="form_registro" novalidate @submit.prevent="enviar()">
+            <fieldset :disabled="enviando || exito !== ''">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="regNombre" placeholder="Nombre completo"
+                  autocomplete="name" x-model="campos.nombre" :class="clase('nombre')"
+                  @blur="tocar('nombre')" @input="revisar('nombre')" aria-describedby="regNombreError">
+                <label for="regNombre">Nombre completo</label>
+                <div class="invalid-feedback" id="regNombreError" x-text="errores.nombre"></div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="regEmail" placeholder="nombre@correo.com"
+                  autocomplete="email" x-model="campos.correo" :class="clase('correo')"
+                  @blur="tocar('correo')" @input="revisar('correo')" aria-describedby="regEmailError">
+                <label for="regEmail">Correo electrónico</label>
+                <div class="invalid-feedback" id="regEmailError" x-text="errores.correo"></div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="regContrasena" placeholder="Contraseña"
+                  autocomplete="new-password" x-model="campos.password" :class="clase('password')"
+                  @blur="tocar('password')" @input="revisar('password')" aria-describedby="regContrasenaError">
+                <label for="regContrasena">Contraseña</label>
+                <div class="invalid-feedback" id="regContrasenaError" x-text="errores.password"></div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="regConfirmarContrasena"
+                  placeholder="Confirmar contraseña" autocomplete="new-password" x-model="campos.confirmar"
+                  :class="clase('confirmar')" @blur="tocar('confirmar')" @input="revisar('confirmar')"
+                  aria-describedby="regConfirmarError">
+                <label for="regConfirmarContrasena">Confirmar contraseña</label>
+                <div class="invalid-feedback" id="regConfirmarError" x-text="errores.confirmar"></div>
+              </div>
+            </fieldset>
+
+            <div class="alert alert-danger py-2 small" id="registro_error" role="alert" x-show="errorGeneral"
+              x-text="errorGeneral"></div>
+            <div class="alert alert-success py-2 small" id="registro_exito" role="status" x-show="exito"
+              x-text="exito"></div>
+
+            <button type="submit" class="btn btn-primary w-100" :disabled="enviando || exito !== ''">
+              <span x-show="enviando" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              <span x-text="enviando ? 'Creando cuenta…' : 'Crear cuenta'">Crear cuenta</span>
+            </button>
           </form>
           <p class="text-center small text-muted mt-3 mb-0">
             ¿Ya tienes cuenta?
@@ -777,11 +807,31 @@
     </div>
   </div>
 
+  <!-- Toasts globales: se dibujan desde Alpine.store('toasts') -->
+  <div class="toast-container position-fixed end-0 p-3" id="contenedor_toasts" aria-live="polite"
+    style="bottom: 4.5rem;">
+    <template x-for="t in $store.toasts.lista" :key="t.id">
+      <div class="toast align-items-center border-0" :class="'text-bg-' + t.tipo" role="status" aria-atomic="true"
+        x-init="$store.toasts.activar($el, t.id)">
+        <div class="d-flex">
+          <div class="toast-body" x-text="t.mensaje"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Cerrar"></button>
+        </div>
+      </div>
+    </template>
+  </div>
+  <!-- [IA] fin -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/api.js"></script>
   <script src="js/vistas.js"></script>
   <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_sesion.md -->
   <script src="js/sesion.js"></script>
+  <!-- [IA] fin -->
+  <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_arreglo-formularios.md -->
+  <script src="js/toasts.js"></script>
+  <script src="js/formularios.js"></script>
   <!-- [IA] fin -->
   <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md -->
   <script src="js/perfil.js"></script>
