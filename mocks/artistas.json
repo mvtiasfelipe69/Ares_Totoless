@@ -1,0 +1,12 @@
+[
+  { "id": "1", "nombre": "Tyler, The Creator", "genero": "Hip-Hop", "pais": "Estados Unidos", "oyentes": 42500000, "color": "#386641", "bio": "Rapero, productor y diseñador estadounidense reconocido por su evolución sonora y estética conceptual en discos como IGOR y CHROMAKOPIA." },
+  { "id": "2", "nombre": "Easykid", "genero": "Urbano", "pais": "Chile", "oyentes": 2100000, "color": "#5a189a", "bio": "Cantante y compositor antofagastino referente del movimiento urbano chileno, creador del concepto Dark Era." },
+  { "id": "3", "nombre": "Playboi Carti", "genero": "Hip-Hop", "pais": "Estados Unidos", "oyentes": 51800000, "color": "#d00000", "bio": "Rapero de Atlanta pionero del sonido rage y el trap experimental con álbumes influyentes como Die Lit y Whole Lotta Red." },
+  { "id": "4", "nombre": "Los Bunkers", "genero": "Rock", "pais": "Chile", "oyentes": 4300000, "color": "#e63946", "bio": "Banda oriunda de Concepción y pilar fundamental del rock chileno contemporáneo con influencias de los años sesenta." },
+  { "id": "5", "nombre": "Daft Punk", "genero": "Electrónica", "pais": "Francia", "oyentes": 23400000, "color": "#2a9df4", "bio": "Dúo francés de música electrónica que revolucionó el french house y el pop sintético a nivel mundial." },
+  { "id": "6", "nombre": "The Weeknd", "genero": "Pop", "pais": "Canadá", "oyentes": 112000000, "color": "#e76f9a", "bio": "Cantante y productor canadiense reconocido por fusionar R&B alternativo con synth-pop ochentero." },
+  { "id": "7", "nombre": "Kidd Voodoo", "genero": "Urbano", "pais": "Chile", "oyentes": 5900000, "color": "#9d4edd", "bio": "Artista chileno que combina reguetón melódico con influencias de rock alternativo e indie." },
+  { "id": "8", "nombre": "Arctic Monkeys", "genero": "Rock", "pais": "Reino Unido", "oyentes": 54200000, "color": "#343a40", "bio": "Cuarteto británico formado en Sheffield, referente del indie rock y el rock alternativo moderno." },
+  { "id": "9", "nombre": "Javiera Mena", "genero": "Pop", "pais": "Chile", "oyentes": 680000, "color": "#ff70a6", "bio": "Cantautora y productora santiaguina considerada un ícono del electropop independiente iberoamericano." },
+  { "id": "10", "nombre": "Niños del Cerro", "genero": "Indie", "pais": "Chile", "oyentes": 290000, "color": "#f4a261", "bio": "Banda santiaguina de indie rock y neo-psicodelia con guitarras atmosféricas y letras introspectivas." }
+]

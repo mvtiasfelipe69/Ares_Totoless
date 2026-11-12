@@ -1,0 +1,20 @@
+[
+  { "id": "1", "titulo": "St. Chroma", "artistaId": "1", "artista": "Tyler, The Creator", "album": "CHROMAKOPIA", "genero": "Hip-Hop", "duracion": 197, "anio": 2024, "color": "#386641" },
+  { "id": "2", "titulo": "EARFQUAKE", "artistaId": "1", "artista": "Tyler, The Creator", "album": "IGOR", "genero": "Hip-Hop", "duracion": 190, "anio": 2019, "color": "#f2a6c0" },
+  { "id": "3", "titulo": "WUSYANAME", "artistaId": "1", "artista": "Tyler, The Creator", "album": "CALL ME IF YOU GET LOST", "genero": "Hip-Hop", "duracion": 121, "anio": 2021, "color": "#a8dadc" },
+  { "id": "4", "titulo": "Vicio", "artistaId": "2", "artista": "Easykid", "album": "Sorry, Estoy En Mi Dark Era", "genero": "Urbano", "duracion": 174, "anio": 2023, "color": "#5a189a" },
+  { "id": "5", "titulo": "Antibaby", "artistaId": "2", "artista": "Easykid", "album": "Sorry, Estoy En Mi Dark Era", "genero": "Urbano", "duracion": 165, "anio": 2023, "color": "#5a189a" },
+  { "id": "6", "titulo": "Christina", "artistaId": "2", "artista": "Easykid", "album": "Visionari", "genero": "Urbano", "duracion": 182, "anio": 2021, "color": "#7b2cbf" },
+  { "id": "7", "titulo": "Stop Breathing", "artistaId": "3", "artista": "Playboi Carti", "album": "Whole Lotta Red", "genero": "Hip-Hop", "duracion": 218, "anio": 2020, "color": "#d00000" },
+  { "id": "8", "titulo": "Sky", "artistaId": "3", "artista": "Playboi Carti", "album": "Whole Lotta Red", "genero": "Hip-Hop", "duracion": 193, "anio": 2020, "color": "#d00000" },
+  { "id": "9", "titulo": "Shoota", "artistaId": "3", "artista": "Playboi Carti", "album": "Die Lit", "genero": "Hip-Hop", "duracion": 153, "anio": 2018, "color": "#495057" },
+  { "id": "10", "titulo": "Bailando Solo", "artistaId": "4", "artista": "Los Bunkers", "album": "La Velocidad de la Luz", "genero": "Rock", "duracion": 272, "anio": 2013, "color": "#e63946" },
+  { "id": "11", "titulo": "Llueve Sobre la Ciudad", "artistaId": "4", "artista": "Los Bunkers", "album": "Vida de Perros", "genero": "Rock", "duracion": 236, "anio": 2005, "color": "#c1121f" },
+  { "id": "12", "titulo": "One More Time", "artistaId": "5", "artista": "Daft Punk", "album": "Discovery", "genero": "Electrónica", "duracion": 320, "anio": 2000, "color": "#2a9df4" },
+  { "id": "13", "titulo": "Instant Crush", "artistaId": "5", "artista": "Daft Punk", "album": "Random Access Memories", "genero": "Electrónica", "duracion": 337, "anio": 2013, "color": "#0077b6" },
+  { "id": "14", "titulo": "Blinding Lights", "artistaId": "6", "artista": "The Weeknd", "album": "After Hours", "genero": "Pop", "duracion": 200, "anio": 2019, "color": "#e76f9a" },
+  { "id": "15", "titulo": "Enrolar", "artistaId": "7", "artista": "Kidd Voodoo", "album": "Los Rompecorazones, Vol. 2", "genero": "Urbano", "duracion": 195, "anio": 2024, "color": "#9d4edd" },
+  { "id": "16", "titulo": "Do I Wanna Know?", "artistaId": "8", "artista": "Arctic Monkeys", "album": "AM", "genero": "Rock", "duracion": 272, "anio": 2013, "color": "#343a40" },
+  { "id": "17", "titulo": "Espada", "artistaId": "9", "artista": "Javiera Mena", "album": "Otra Era", "genero": "Pop", "duracion": 255, "anio": 2014, "color": "#ff70a6" },
+  { "id": "18", "titulo": "Las Distancias", "artistaId": "10", "artista": "Niños del Cerro", "album": "Lance", "genero": "Indie", "duracion": 284, "anio": 2018, "color": "#f4a261" }
+]

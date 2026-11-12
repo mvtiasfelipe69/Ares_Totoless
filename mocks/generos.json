@@ -1,0 +1,8 @@
+[
+  { "id": "1", "nombre": "Hip-Hop", "color": "#386641" },
+  { "id": "2", "nombre": "Urbano", "color": "#7b2cbf" },
+  { "id": "3", "nombre": "Rock", "color": "#e63946" },
+  { "id": "4", "nombre": "Pop", "color": "#e76f9a" },
+  { "id": "5", "nombre": "Electrónica", "color": "#2a9df4" },
+  { "id": "6", "nombre": "Indie", "color": "#f4a261" }
+]
