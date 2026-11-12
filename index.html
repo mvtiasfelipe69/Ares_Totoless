@@ -127,7 +127,7 @@
             <div x-show="$store.catalogo.cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="$store.catalogo.error" class="alert alert-danger d-flex justify-content-between align-items-center"
+            <div x-show="!!$store.catalogo.error" :class="{'d-flex': $store.catalogo.error}" class="alert alert-danger justify-content-between align-items-center"
               role="alert" style="display: none;">
               <span x-text="$store.catalogo.error"></span>
               <button type="button" class="btn btn-sm btn-outline-light" @click="$store.catalogo.cargar(true)">Reintentar</button>
@@ -289,7 +289,7 @@
             <div x-show="$store.catalogo.cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="$store.catalogo.error" class="alert alert-danger d-flex justify-content-between align-items-center"
+            <div x-show="!!$store.catalogo.error" :class="{'d-flex': $store.catalogo.error}" class="alert alert-danger justify-content-between align-items-center"
               role="alert" style="display: none;">
               <span x-text="$store.catalogo.error"></span>
               <button type="button" class="btn btn-sm btn-outline-light" @click="$store.catalogo.cargar(true)">Reintentar</button>
@@ -347,7 +347,7 @@
             <div x-show="cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="!cargando && error" class="alert alert-danger d-flex justify-content-between align-items-center"
+            <div x-show="!cargando && !!error" :class="{'d-flex': error}" class="alert alert-danger justify-content-between align-items-center"
               role="alert" style="display: none;">
               <span x-text="status === 404 ? 'Esta canción no existe.' : error"></span>
               <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404" @click="cargar(param)">Reintentar</button>
@@ -380,7 +380,7 @@
             <div x-show="cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="!cargando && error" class="alert alert-danger d-flex justify-content-between align-items-center"
+            <div x-show="!cargando && !!error" :class="{'d-flex': error}" class="alert alert-danger justify-content-between align-items-center"
               role="alert" style="display: none;">
               <span x-text="status === 404 ? 'Este artista no existe.' : error"></span>
               <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404" @click="cargar(param)">Reintentar</button>
