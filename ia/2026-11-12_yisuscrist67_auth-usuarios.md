@@ -25,10 +25,5 @@ Explícamelo por partes comparando con C++/Java y dame la plantilla del registro
 ...
 -->
 
-## Qué usé y qué cambié
-- Usado tal cual: <!-- ej: mocks/usuarios.json y los bloques [IA] de js/api.js -->
-- Cambios hechos por mí: <!-- ej: ninguno / cambié tal mensaje de error -->
-
-## Cómo lo verifiqué
-<!-- ej: abrí con Live Server y en la consola probé
-await api.login({ correo: 'admin@arestotoless.cl', password: 'admin123' }) -->
+## Qué se modificó respecto a la respuesta de la IA
+Nada, se usó tal cual.

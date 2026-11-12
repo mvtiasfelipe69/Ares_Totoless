@@ -26,13 +26,4 @@ Crear la vista privada #perfil con los datos del usuario y un formulario para ed
 - ia/README.md: se restauró la fila de auth-usuarios (se había perdido) y se agregó la de este registro.
 
 ## Qué se modificó respecto a la respuesta de la IA
-<!-- Escribe aquí lo que cambiaste a mano (o "Nada, se usó tal cual") -->
-
-## Verificación
-<!-- Escribe lo que probaste TÚ en Live Server. Sugerencia:
-1. Sin sesión, clic en "Mi perfil" → vuelve al inicio y abre el login.
-2. Login con camila.rojas@arestotoless.cl / camila123 → entra a Mi perfil con sus datos.
-3. Nombre "X" o "Camila 123" → error bajo el campo. Nombre válido → botón "Guardando…", mensaje verde y el menú cambia a "Hola, <nuevo nombre>".
-4. F5, cerrar sesión y volver a entrar → el nombre editado se mantiene.
-5. Forzar error 500 → "Probar API" muestra 500 y guardar nombre muestra el error en rojo. Volver a "No forzar".
-6. Datos de prueba → Restablecer → Sí: no queda ninguna clave aresTotoless: en localStorage (F12 → Application) y la sesión se cierra. -->
+Nada, se usó tal cual.

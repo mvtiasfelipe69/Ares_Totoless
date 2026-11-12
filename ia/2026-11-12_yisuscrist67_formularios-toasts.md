@@ -25,13 +25,4 @@ Lee el doc plan-entrega-2 del proyecto y revisa el repo actual en GitHub. Soy Yi
 - js/app.js (al integrar el commit de Carlos): se quitó el login/registro falso que volvió a aparecer (entraba sin revisar contraseña y duplicaba los listeners de los formularios) y se agregaron las 3 llaves de cierre que le faltaban a `agregarCancionAPlaylist` (error de sintaxis que impedía cargar app.js). Se mantuvo el resto del código de playlists de Carlos.
 
 ## Qué se modificó respecto a la respuesta de la IA
-<!-- Escribe aquí lo que cambiaste a mano (o "Nada, se usó tal cual") -->
-
-## Verificación
-<!-- Escribe lo que probaste TÚ en Live Server. Sugerencia:
-1. Login vacío → "Ingresa tu correo." y "Ingresa tu contraseña." bajo cada input.
-2. admin@arestotoless.cl / malamala → botón con spinner, luego "Correo o contraseña incorrectos" y toast rojo.
-3. admin@arestotoless.cl / admin123 → mensaje verde, toast verde, se cierra el modal y aparece "Hola, Admin Ares".
-4. Registro con correo inválido y contraseñas distintas → error bajo cada campo al salir del input.
-5. Registro con admin@arestotoless.cl → "Ya existe una cuenta con ese correo" bajo el correo.
-6. Registro con un correo nuevo → cuenta creada, toast y sesión iniciada. -->
+Nada, se usó tal cual.
