@@ -172,40 +172,48 @@ document.addEventListener('click', (e) => {
     }
   });
 
-  const bloqueInvitado = document.getElementById('bloque_invitado');
-  const bloqueUsuario = document.getElementById('bloque_usuario');
-  const nombreUsuarioActivo = document.getElementById('nombre_usuario_activo');
-  const btnCerrarSesion = document.getElementById('btn_cerrar_sesion');
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_sesion.md
+  // Login y registro: validan el formulario, consultan la API simulada y,
+  // si responde ok, entregan el usuario a Alpine.store('sesion').
+  const sesion = () => Alpine.store('sesion');
 
-  function iniciarSesionUsuario(nombre) {
-    nombreUsuarioActivo.textContent = nombre;
-    bloqueInvitado.classList.add('d-none');
-    bloqueInvitado.classList.remove('d-flex');
-    bloqueUsuario.classList.remove('d-none');
-    bloqueUsuario.classList.add('d-flex');
+  // Envía un formulario de autenticación. `llamada` devuelve la promesa de la API.
+  async function enviarAutenticacion(formulario, cajaError, llamada) {
+    const boton = formulario.querySelector('button[type="submit"]');
+    cajaError.classList.add('d-none');
+    boton.disabled = true;
+    let res;
+    try {
+      res = await llamada();
+    } catch {
+      res = { ok: false, error: 'No se pudo conectar con el servidor.' };
+    }
+    boton.disabled = false;
+
+    if (!res.ok) {
+      cajaError.textContent = res.error || 'No se pudo iniciar sesión.';
+      cajaError.classList.remove('d-none');
+      return;
+    }
+    cerrarModalYResetear(formulario);
+    sesion().iniciar(res.data);
   }
 
-  btnCerrarSesion.addEventListener('click', () => {
-    bloqueUsuario.classList.add('d-none');
-    bloqueUsuario.classList.remove('d-flex');
-    bloqueInvitado.classList.remove('d-none');
-    bloqueInvitado.classList.add('d-flex');
-  });
-
   const formularioLogin = document.getElementById('form_login');
+  const errorLogin = document.getElementById('login_error');
   formularioLogin.addEventListener('submit', (e) => {
     e.preventDefault();
     e.stopPropagation();
     formularioLogin.classList.add('was-validated');
-    if (formularioLogin.checkValidity()) {
-      const email = document.getElementById('loginCorreo').value;
-      const nombreVisible = email.split('@')[0];
-      iniciarSesionUsuario(nombreVisible);
-      cerrarModalYResetear(formularioLogin);
-    }
+    if (!formularioLogin.checkValidity()) return;
+
+    const correo = document.getElementById('loginCorreo').value.trim();
+    const contrasena = document.getElementById('loginContrasena').value;
+    enviarAutenticacion(formularioLogin, errorLogin, () => api.login(correo, contrasena));
   });
 
   const formularioRegistro = document.getElementById('form_registro');
+  const errorRegistro = document.getElementById('registro_error');
   const regContrasena = document.getElementById('regContrasena');
   const regConfirmarContrasena = document.getElementById('regConfirmarContrasena');
 
@@ -222,13 +230,17 @@ document.addEventListener('click', (e) => {
 
   formularioRegistro.addEventListener('submit', (e) => {
     e.preventDefault();
-    e.stopPropagation()
+    e.stopPropagation();
     validarContrasenas();
     formularioRegistro.classList.add('was-validated');
-    if (formularioRegistro.checkValidity()) {
-      const nombre = document.getElementById('regNombre').value;
-      iniciarSesionUsuario(nombre);
-      cerrarModalYResetear(formularioRegistro);
-    }
+    if (!formularioRegistro.checkValidity()) return;
+
+    const datos = {
+      nombre: document.getElementById('regNombre').value.trim(),
+      correo: document.getElementById('regEmail').value.trim(),
+      contrasena: regContrasena.value,
+    };
+    enviarAutenticacion(formularioRegistro, errorRegistro, () => api.registrar(datos));
   });
+  // [IA] fin
 });
