@@ -1,0 +1,12 @@
+[
+  { "id": "1", "nombre": "Admin Ares", "correo": "admin@arestotoless.cl", "password": "admin123", "rol": "admin", "plan": "premium", "creadoEn": "2026-08-01" },
+  { "id": "2", "nombre": "Camila Rojas", "correo": "camila.rojas@arestotoless.cl", "password": "camila123", "rol": "usuario", "plan": "premium", "creadoEn": "2026-08-14" },
+  { "id": "3", "nombre": "Diego Fuentes", "correo": "diego.fuentes@arestotoless.cl", "password": "diego123", "rol": "usuario", "plan": "gratis", "creadoEn": "2026-08-20" },
+  { "id": "4", "nombre": "Valentina Soto", "correo": "valentina.soto@arestotoless.cl", "password": "valentina123", "rol": "usuario", "plan": "gratis", "creadoEn": "2026-09-02" },
+  { "id": "5", "nombre": "Benjamín Araya", "correo": "benjamin.araya@arestotoless.cl", "password": "benjamin123", "rol": "usuario", "plan": "premium", "creadoEn": "2026-09-10" },
+  { "id": "6", "nombre": "Antonia Vega", "correo": "antonia.vega@arestotoless.cl", "password": "antonia123", "rol": "usuario", "plan": "gratis", "creadoEn": "2026-09-18" },
+  { "id": "7", "nombre": "Tomás Riquelme", "correo": "tomas.riquelme@arestotoless.cl", "password": "tomas123", "rol": "usuario", "plan": "gratis", "creadoEn": "2026-09-27" },
+  { "id": "8", "nombre": "Fernanda Lagos", "correo": "fernanda.lagos@arestotoless.cl", "password": "fernanda123", "rol": "usuario", "plan": "premium", "creadoEn": "2026-10-05" },
+  { "id": "9", "nombre": "Ignacio Paredes", "correo": "ignacio.paredes@arestotoless.cl", "password": "ignacio123", "rol": "usuario", "plan": "gratis", "creadoEn": "2026-10-16" },
+  { "id": "10", "nombre": "Javiera Muñoz", "correo": "javiera.munoz@arestotoless.cl", "password": "javiera123", "rol": "usuario", "plan": "gratis", "creadoEn": "2026-10-29" }
+]
