@@ -1,4 +1,4 @@
-// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js
+// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js.md
 (() => {
   const CLAVE_CONFIG = 'aresTotoless:config'; // { forzarError: 500, probFalla: 0.3 }
   const cache = {};
@@ -42,7 +42,82 @@
     }
   }
 
-  window.api = { 
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_auth-usuarios.md
+  const CLAVE_USUARIOS = 'aresTotoless:usuarios'; // cuentas creadas desde el formulario de registro
+  const REGEX_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const normalizarCorreo = (correo) => String(correo || '').trim().toLowerCase();
+
+  // Cuentas guardadas en el navegador (un JSON del repo no se puede escribir desde el frontend).
+  function leerRegistrados() {
+    try {
+      return JSON.parse(localStorage.getItem(CLAVE_USUARIOS)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  // Todos los usuarios: los 10 de mocks/usuarios.json + los registrados en este navegador.
+  async function leerUsuarios() {
+    return [...(await leerMock('usuarios')), ...leerRegistrados()];
+  }
+
+  // Copia del usuario sin la contraseña: la API nunca la devuelve.
+  function sinPassword(usuario) {
+    const { password, ...publico } = usuario;
+    return publico;
+  }
+  // [IA] fin
+
+  window.api = {
+    // [IA] inicio · ia/2026-11-12_yisuscrist67_auth-usuarios.md
+    // POST /api/auth/login   cuerpo: { correo, password }
+    login(credenciales = {}, opts = {}) {
+      return ejecutar(opts, async () => {
+        const correo = normalizarCorreo(credenciales.correo);
+        const password = String(credenciales.password || '');
+        if (!correo || !password) return fallo(400, 'Ingresa tu correo y tu contraseña');
+
+        const usuario = (await leerUsuarios()).find((u) => u.correo.toLowerCase() === correo);
+        if (!usuario || usuario.password !== password) {
+          return fallo(401, 'Correo o contraseña incorrectos');
+        }
+        return ok(200, sinPassword(usuario));
+      });
+    },
+
+    // POST /api/auth/registro   cuerpo: { nombre, correo, password }
+    registrar(datos = {}, opts = {}) {
+      return ejecutar(opts, async () => {
+        const nombre = String(datos.nombre || '').trim();
+        const correo = normalizarCorreo(datos.correo);
+        const password = String(datos.password || '');
+
+        if (nombre.length < 2) return fallo(400, 'El nombre debe tener al menos 2 caracteres');
+        if (!REGEX_CORREO.test(correo)) return fallo(400, 'El correo no es válido');
+        if (password.length < 6) return fallo(400, 'La contraseña debe tener al menos 6 caracteres');
+
+        const usuarios = await leerUsuarios();
+        if (usuarios.some((u) => u.correo.toLowerCase() === correo)) {
+          return fallo(409, 'Ya existe una cuenta con ese correo');
+        }
+
+        const ultimoId = Math.max(0, ...usuarios.map((u) => Number(u.id) || 0));
+        const nuevo = {
+          id: String(ultimoId + 1),
+          nombre,
+          correo,
+          password,
+          rol: 'usuario',
+          plan: 'gratis',
+          creadoEn: new Date().toISOString().slice(0, 10),
+        };
+        localStorage.setItem(CLAVE_USUARIOS, JSON.stringify([...leerRegistrados(), nuevo]));
+        return ok(201, sinPassword(nuevo));
+      });
+    },
+    // [IA] fin
+
     // GET /api/canciones?busqueda=&genero=
     getCanciones(opts = {}) {
       return ejecutar(opts, async () => {
