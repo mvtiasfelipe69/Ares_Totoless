@@ -1,4 +1,4 @@
-// [IA] inicio · ia/2026-11-11_matias_api-y-vistas.md
+// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js
 // Estado Alpine de las vistas de música: catálogo compartido, Explorar y detalles.
 document.addEventListener('alpine:init', () => {
   Alpine.store('catalogo', {
