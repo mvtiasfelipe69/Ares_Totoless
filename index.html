@@ -7,14 +7,14 @@
   <title>AresTotoless</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/custom.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body class="pb-5" x-data="{
         hash: location.hash || '#vista_musica',
         get ruta() { return this.hash.split('/')[0]; },
         get param() { return this.hash.split('/')[1] || null; }
-      }" @hashchange.window="hash = location.hash || '#vista_musica'">
+      }" x-init="$store.catalogo.cargar()" @hashchange.window="hash = location.hash || '#vista_musica'">
 
   <header class="border-bottom sticky-top">
     <nav class="navbar navbar-expand-md container py-2">
@@ -26,10 +26,10 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navPrincipal">
-        <form class="d-flex flex-grow-1 mx-md-4 my-2 my-md-0" role="search" id="form_busqueda">
+        <form class="d-flex flex-grow-1 mx-md-4 my-2 my-md-0" role="search" id="form_busqueda" @submit.prevent="location.hash = '#vista_explorar'">
           <div class="input-group">
             <input type="search" class="form-control" id="input_busqueda" placeholder="Buscar canciones, artistas..."
-              aria-label="Buscar" required>
+              aria-label="Buscar" required x-model="$store.catalogo.busqueda">
             <button class="btn btn-outline-secondary" type="submit" id="btn_ejecutar_busqueda">Buscar</button>
           </div>
         </form>
@@ -61,7 +61,7 @@
     </nav>
   </header>
 
-  <!-- [IA] inicio ia/2026-11-11_matias_router-hash.md -->
+  <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_alpine-html.md -->
   <main>
     <section id="vista_principal" class="container-fluid py-4">
       <div class="row">
@@ -123,6 +123,17 @@
               </div>
             </div>
 
+            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
+            <div x-show="$store.catalogo.cargando" class="text-center py-5">
+              <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+            </div>
+            <div x-show="$store.catalogo.error" class="alert alert-danger d-flex justify-content-between align-items-center"
+              role="alert" style="display: none;">
+              <span x-text="$store.catalogo.error"></span>
+              <button type="button" class="btn btn-sm btn-outline-light" @click="$store.catalogo.cargar(true)">Reintentar</button>
+            </div>
+            <!-- [IA] fin -->
+
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tabla_canciones">
                 <thead>
@@ -135,33 +146,19 @@
                   </tr>
                 </thead>
                 <tbody id="lista_canciones">
-                  <tr data-song_id="1">
-                    <td>
-                      <button class="btn btn-sm btn-outline-primary play_btn" type="button">▶</button>
-                    </td>
-                    <td class="fw-semibold">Canción 1</td>
-                    <td>Banda</td>
-                    <td>Álbum</td>
-                    <td class="text-end">6:66</td>
-                  </tr>
-                  <tr data-song_id="2">
-                    <td>
-                      <button class="btn btn-sm btn-outline-primary play_btn" type="button">▶</button>
-                    </td>
-                    <td class="fw-semibold">Canción 2</td>
-                    <td>Banda</td>
-                    <td>Album</td>
-                    <td class="text-end">6:66</td>
-                  </tr>
-                  <tr data-song_id="3">
-                    <td>
-                      <button class="btn btn-sm btn-outline-primary play_btn" type="button">▶</button>
-                    </td>
-                    <td class="fw-semibold">Canción 3</td>
-                    <td>Banda</td>
-                    <td>Album</td>
-                    <td class="text-end">6:66</td>
-                  </tr>
+                  <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+                  <template x-for="c in $store.catalogo.canciones" :key="c.id">
+                    <tr :data-song_id="c.id">
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                      </td>
+                      <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
+                      <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
+                      <td x-text="c.album"></td>
+                      <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
+                    </tr>
+                  </template>
+                  <!-- [IA] fin -->
                 </tbody>
               </table>
             </div>
@@ -249,44 +246,197 @@
           </div>
 
           <!-- VISTA: EXPLORAR -->
-          <div id="vista_explorar" class="panel-contenido" x-show="ruta === '#vista_explorar'" style="display: none;">
+          <div id="vista_explorar" class="panel-contenido" x-show="ruta === '#vista_explorar'" x-data="explorar()" style="display: none;">
+            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
             <h1 class="h4 mb-3">Explorar géneros</h1>
             <div class="row row-cols-2 row-cols-md-4 g-3">
-              <div class="col">
-                <div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Rock</div>
-              </div>
-              <div class="col">
-                <div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Urbano</div>
-              </div>
-              <div class="col">
-                <div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Electrónica
+              <template x-for="g in $store.catalogo.generos" :key="g.id">
+                <div class="col">
+                  <div class="p-4 bg-dark rounded text-center fw-bold border" role="button" tabindex="0"
+                    :class="genero === g.nombre ? 'border-primary' : 'border-secondary'"
+                    @click="genero = (genero === g.nombre ? '' : g.nombre)"
+                    @keydown.enter="genero = (genero === g.nombre ? '' : g.nombre)" x-text="g.nombre"></div>
                 </div>
+              </template>
+            </div>
+
+            <div class="row g-3 my-2">
+              <div class="col-12 col-md-6">
+                <label for="explorar_busqueda" class="form-label small mb-1">Buscar</label>
+                <input type="search" id="explorar_busqueda" class="form-control" placeholder="Canción o artista"
+                  x-model="$store.catalogo.busqueda">
               </div>
-              <div class="col">
-                <div class="p-4 bg-dark rounded text-center fw-bold border border-secondary" role="button">Pop</div>
+              <div class="col-6 col-md-3">
+                <label for="explorar_genero" class="form-label small mb-1">Género</label>
+                <select id="explorar_genero" class="form-select" x-model="genero">
+                  <option value="">Todos</option>
+                  <template x-for="g in $store.catalogo.generos" :key="g.id">
+                    <option :value="g.nombre" x-text="g.nombre"></option>
+                  </template>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="explorar_orden" class="form-label small mb-1">Ordenar por</label>
+                <select id="explorar_orden" class="form-select" x-model="orden">
+                  <option value="titulo_asc">Título (A-Z)</option>
+                  <option value="titulo_desc">Título (Z-A)</option>
+                  <option value="duracion_asc">Duración (menor)</option>
+                  <option value="duracion_desc">Duración (mayor)</option>
+                </select>
               </div>
             </div>
+
+            <div x-show="$store.catalogo.cargando" class="text-center py-5">
+              <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+            </div>
+            <div x-show="$store.catalogo.error" class="alert alert-danger d-flex justify-content-between align-items-center"
+              role="alert" style="display: none;">
+              <span x-text="$store.catalogo.error"></span>
+              <button type="button" class="btn btn-sm btn-outline-light" @click="$store.catalogo.cargar(true)">Reintentar</button>
+            </div>
+            <div x-show="$store.catalogo.cargado && !filtradas.length"
+              class="border border-secondary rounded p-4 text-center text-muted" style="display: none;">
+              No se encontraron canciones con esos filtros.
+            </div>
+
+            <div x-show="$store.catalogo.cargado && filtradas.length" style="display: none;">
+              <p class="small text-secondary" x-text="filtradas.length + ' resultados'"></p>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px;"></th>
+                      <th scope="col">Título</th>
+                      <th scope="col">Artista</th>
+                      <th scope="col">Álbum</th>
+                      <th scope="col" class="text-end">Duración</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template x-for="c in paginadas" :key="c.id">
+                      <tr :data-song_id="c.id">
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                        </td>
+                        <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
+                        <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
+                        <td x-text="c.album"></td>
+                        <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+              <nav aria-label="Paginación de resultados" class="d-flex justify-content-between align-items-center mt-3">
+                <button type="button" class="btn btn-outline-secondary btn-sm" :disabled="pagina === 1"
+                  @click="anterior()">← Anterior</button>
+                <span class="small text-secondary" x-text="'Página ' + pagina + ' de ' + totalPaginas"></span>
+                <button type="button" class="btn btn-outline-secondary btn-sm" :disabled="pagina === totalPaginas"
+                  @click="siguiente()">Siguiente →</button>
+              </nav>
+            </div>
+            <!-- [IA] fin -->
           </div>
 
           <!-- VISTA: DETALLE CANCIÓN (#cancion/ID) -->
-          <div id="vista_cancion" class="panel-contenido" x-show="ruta === '#cancion'" style="display: none;">
+          <div id="vista_cancion" class="panel-contenido" x-show="ruta === '#cancion'" x-data="detalleCancion()"
+            x-effect="if (ruta === '#cancion' && param) cargar(param)" style="display: none;">
             <a href="#vista_musica" class="btn btn-outline-secondary btn-sm mb-3">← Volver</a>
-            <div class="row g-4 align-items-end">
+            
+            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+            <div x-show="cargando" class="text-center py-5">
+              <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+            </div>
+            <div x-show="!cargando && error" class="alert alert-danger d-flex justify-content-between align-items-center"
+              role="alert" style="display: none;">
+              <span x-text="status === 404 ? 'Esta canción no existe.' : error"></span>
+              <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404" @click="cargar(param)">Reintentar</button>
+            </div>
+            
+            <div class="row g-4 align-items-end" x-show="cancion" style="display: none;">
               <div class="col-12 col-md-4">
-                <img id="cancion_portada" class="img-fluid rounded shadow" alt="Portada">
+                <div id="cancion_portada" class="d-flex align-items-center justify-content-center rounded shadow display-1 fw-bold text-white"
+                  style="aspect-ratio: 1 / 1;" :style="'background:' + cancion?.color" role="img"
+                  :aria-label="'Portada de ' + cancion?.titulo" x-text="cancion?.titulo.charAt(0)"></div>
               </div>
               <div class="col-12 col-md-8">
                 <p class="text-uppercase small text-secondary mb-1">Canción</p>
-                <h1 class="display-6 fw-bold mb-2" x-text="'Cargando canción ' + param"></h1>
-                <p class="mb-3" id="cancion_artista">—</p>
-                <p class="small text-secondary mb-0" id="cancion_meta">Álbum · Género · Duración</p>
+                <h1 class="display-6 fw-bold mb-2" x-text="cancion?.titulo"></h1>
+                <p class="mb-3" id="cancion_artista">
+                  <a class="link-light" :href="'#artista/' + cancion?.artistaId" x-text="cancion?.artista"></a>
+                </p>
+                <p class="small text-secondary mb-0" id="cancion_meta"
+                  x-text="cancion ? cancion.album + ' · ' + cancion.genero + ' · ' + cancion.anio + ' · ' + $store.catalogo.fmt(cancion.duracion) : ''"></p>
               </div>
             </div>
+            <!-- [IA] fin -->
+          </div>
+
+          <!-- VISTA: DETALLE ARTISTA (#artista/ID) -->
+          <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+          <div id="vista_artista" class="panel-contenido" x-show="ruta === '#artista'" x-data="detalleArtista()"
+            x-effect="if (ruta === '#artista' && param) cargar(param)" style="display: none;">
+            <a href="#vista_explorar" class="btn btn-outline-secondary btn-sm mb-3">← Volver</a>
+            <div x-show="cargando" class="text-center py-5">
+              <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+            </div>
+            <div x-show="!cargando && error" class="alert alert-danger d-flex justify-content-between align-items-center"
+              role="alert" style="display: none;">
+              <span x-text="status === 404 ? 'Este artista no existe.' : error"></span>
+              <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404" @click="cargar(param)">Reintentar</button>
+            </div>
+            <template x-if="artista">
+              <div>
+                <div class="row g-4 align-items-end mb-4">
+                  <div class="col-12 col-md-3">
+                    <div class="d-flex align-items-center justify-content-center rounded-circle shadow display-1 fw-bold text-white"
+                      style="aspect-ratio: 1 / 1;" :style="'background:' + artista.color" role="img"
+                      :aria-label="'Imagen de ' + artista.nombre" x-text="artista.nombre.charAt(0)"></div>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <p class="text-uppercase small text-secondary mb-1">Artista</p>
+                    <h1 class="display-6 fw-bold mb-2" x-text="artista.nombre"></h1>
+                    <p class="mb-2" x-text="artista.bio"></p>
+                    <p class="small text-secondary mb-0"
+                      x-text="artista.genero + ' · ' + artista.pais + ' · ' + artista.oyentes.toLocaleString('es-CL') + ' oyentes mensuales'"></p>
+                  </div>
+                </div>
+                <h2 class="h5 mb-3">Canciones</h2>
+                <div class="border border-secondary rounded p-4 text-center text-muted" x-show="!canciones.length"
+                  style="display: none;">Este artista aún no tiene canciones.</div>
+                <div class="table-responsive" x-show="canciones.length">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col" style="width: 50px;"></th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Artista</th>
+                        <th scope="col">Álbum</th>
+                        <th scope="col" class="text-end">Duración</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template x-for="c in canciones" :key="c.id">
+                        <tr :data-song_id="c.id">
+                          <td>
+                            <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                          </td>
+                          <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
+                          <td x-text="c.artista"></td>
+                          <td x-text="c.album"></td>
+                          <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </template>
           </div>
           <!-- [IA] fin -->
 
           <div id="vista_404" class="panel-contenido text-center py-5"
-            x-show="!['#vista_musica','#vista_playlists','#vista_explorar','#cancion'].includes(ruta) && !ruta.startsWith('#playlist')"
+            x-show="!['#vista_musica','#vista_playlists','#vista_explorar','#cancion','#artista'].includes(ruta) && !ruta.startsWith('#playlist')"
             style="display: none;">
             <h1 class="display-1 fw-bold text-secondary">404</h1>
             <p class="lead">Página no encontrada</p>
@@ -297,7 +447,7 @@
       </div>
     </section>
   </main>
-
+  <!-- [IA] fin -->
 
   <aside class="fixed-bottom bg-dark text-white border-top border-secondary py-2" id="reproductor_barra">
     <div class="container d-flex justify-content-between align-items-center">
@@ -470,6 +620,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/vistas.js"></script>
   <script src="js/app.js"></script>
 </body>
 
