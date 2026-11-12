@@ -9,24 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'GYM': [],
     'kizazo': []
   };
-  const sessionStore = {
-    usuario: JSON.parse(localStorage.getItem('usuario')) || null,
 
-    iniciarSesion: function(datos) 
-    {
-      this.usuario = datos;
-      localStorage.setItem('usuario', JSON.stringify(datos));
-      window.dispatchEvent(new Event('cambioSesion'));
-    },
-
-    cerrarSesion: function()
-    {
-      this.usuario = null;
-      localStorage.removeItem('usuario');
-      window.dispatchEvent(new Event('cambioSesion'));
-      window.location.hash = '#/'; 
-    }
-  };
   const nombreCancion = document.getElementById('reproductor_nombre_cancion');
   const nombreArtista = document.getElementById('reproductor_nombre_artista');
   const botonAlternar = document.getElementById('btn_alternar_reproductor');
@@ -74,7 +57,9 @@ document.addEventListener('click', (e) => {
     estaReproduciendo = !estaReproduciendo;
     actualizarInterfazReproductor();
   });
+
   document.getElementById('form_busqueda').addEventListener('submit', (e) => e.preventDefault());
+
   const tituloDetalle = document.getElementById('detalle_playlist_titulo');
   const descDetalle = document.getElementById('detalle_playlist_desc');
   const mensajeVacio = document.getElementById('mensaje_playlist_vacia');
@@ -187,146 +172,75 @@ document.addEventListener('click', (e) => {
     }
   });
 
-  // [IA] inicio · ia/2026-11-12_yisuscrist67_formularios-toasts.md
-  // El login y el registro ahora viven en js/formularios.js (componentes Alpine).
-  // [IA] fin
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_sesion.md
+  // Login y registro: validan el formulario, consultan la API simulada y,
+  // si responde ok, entregan el usuario a Alpine.store('sesion').
+  const sesion = () => Alpine.store('sesion');
 
-  function inicializarAuth() {
-    let form = document.getElementById('form-login');
-    if (form) 
-    {
-      form.addEventListener('submit', function(e)
-      {
-        e.preventDefault(); 
-        let mail = document.getElementById('email').value;
-        let pass = document.getElementById('password').value;
-        if (mail === "" || pass === "") 
-        {
-          alert("Faltan datos por llenar");
-          return;
-        }
-        let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!regex.test(mail))
-        {
-          alert("Ingresa un correo válido");
-          return;
-        }
-        let userLogin = 
-        { email: mail, token: '12345' };
-        sessionStore.iniciarSesion(userLogin);
-        window.location.hash = '#/inicio'; 
-      });
+  // Envía un formulario de autenticación. `llamada` devuelve la promesa de la API.
+  async function enviarAutenticacion(formulario, cajaError, llamada) {
+    const boton = formulario.querySelector('button[type="submit"]');
+    cajaError.classList.add('d-none');
+    boton.disabled = true;
+    let res;
+    try {
+      res = await llamada();
+    } catch {
+      res = { ok: false, error: 'No se pudo conectar con el servidor.' };
     }
-  }
-  let estadoPlaylists = [];
-  function renderizarListadoPlaylists() 
-  {
-    let contenedor = document.getElementById('contenedor-playlists');
-    if (!contenedor) return;
-    let dataLocal = localStorage.getItem('playlistsDB');
-    if (dataLocal) 
-    {
-      estadoPlaylists = JSON.parse(dataLocal);
-    } 
-    else 
-    {
-      estadoPlaylists = [];
-    }
-    if (estadoPlaylists.length === 0)
-    {
-      contenedor.innerHTML = '<p>No hay playlists creadas.</p>';
+    boton.disabled = false;
+
+    if (!res.ok) {
+      cajaError.textContent = res.error || 'No se pudo iniciar sesión.';
+      cajaError.classList.remove('d-none');
       return;
     }
-    let html = "";
-    for (let i = 0; i < estadoPlaylists.length; i++) 
-    {
-      let p = estadoPlaylists[i];
-      html += `
-        <div class="playlist-card" data-id="${p.id}">
-          <h3>${p.nombre}</h3>
-          <button class="btn-editar">Editar</button>
-          <button class="btn-eliminar">Eliminar</button>
-        </div>
-      `;
-    }
-    contenedor.innerHTML = html;
+    cerrarModalYResetear(formulario);
+    sesion().iniciar(res.data);
   }
-  function guardarPlaylist(nombreIngresado, idEditar = null) 
-  {
-    let db = JSON.parse(localStorage.getItem('playlistsDB')) || [];
-    if (idEditar !== null) {
-      for (let i = 0; i < db.length; i++) 
-      {
-        if (db[i].id == idEditar) 
-        {
-          db[i].nombre = nombreIngresado;
-          break; 
-        }
-      }
-    } 
-    else 
-    {
-      let nueva = 
-      {
-        id: Date.now().toString(), 
-        nombre: nombreIngresado,
-        canciones: []
-      };
-      db.push(nueva);
-    }
-    localStorage.setItem('playlistsDB', JSON.stringify(db));
-    renderizarListadoPlaylists(); 
-  }
-  function inicializarEventosPlaylists()
-  {
-    let contenedor = document.getElementById('contenedor-playlists');
-    if (contenedor)
-    {
-      contenedor.addEventListener('click', function(e) {
-        let btn = e.target;
-        if (btn.classList.contains('btn-eliminar')) {
-          let card = btn.parentElement; 
-          let playlistId = card.getAttribute('data-id');
 
-          let confirmar = confirm('¿Seguro que quieres borrar esta playlist?');
-          if (confirmar) {
-            let db = JSON.parse(localStorage.getItem('playlistsDB')) || [];
-            let nuevaDb = db.filter(p => p.id != playlistId);
-            localStorage.setItem('playlistsDB', JSON.stringify(nuevaDb));
-            renderizarListadoPlaylists(); 
-          }
-        }
-      });
+  const formularioLogin = document.getElementById('form_login');
+  const errorLogin = document.getElementById('login_error');
+  formularioLogin.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    formularioLogin.classList.add('was-validated');
+    if (!formularioLogin.checkValidity()) return;
+
+    const correo = document.getElementById('loginCorreo').value.trim();
+    const contrasena = document.getElementById('loginContrasena').value;
+    enviarAutenticacion(formularioLogin, errorLogin, () => api.login({ correo, password: contrasena }));
+  });
+
+  const formularioRegistro = document.getElementById('form_registro');
+  const errorRegistro = document.getElementById('registro_error');
+  const regContrasena = document.getElementById('regContrasena');
+  const regConfirmarContrasena = document.getElementById('regConfirmarContrasena');
+
+  function validarContrasenas() {
+    if (regConfirmarContrasena.value && regConfirmarContrasena.value !== regContrasena.value) {
+      regConfirmarContrasena.setCustomValidity('Las contraseñas no coinciden');
+    } else {
+      regConfirmarContrasena.setCustomValidity('');
     }
   }
-  function agregarCancionAPlaylist(idPlaylist, cancion) 
-  {
-    let db = JSON.parse(localStorage.getItem('playlistsDB')) || [];
-    for (let i = 0; i < db.length; i++) 
-    {
-      if (db[i].id == idPlaylist) 
-      {
-        let existe = false;
-        for (let j = 0; j < db[i].canciones.length; j++) 
-        {
-          if (db[i].canciones[j].id == cancion.id) 
-          {
-            existe = true;
-          }
-        }
-        if (existe) 
-        {
-          alert('La canción ya está en la playlist');
-        } 
-        else 
-        {
-          db[i].canciones.push(cancion);
-          localStorage.setItem('playlistsDB', JSON.stringify(db));
-        }
-      // [IA] inicio · ia/2026-11-12_yisuscrist67_formularios-toasts.md
-      // Faltaban estas 3 llaves de cierre (if, for y función): sin ellas app.js no corría.
-      }
-    }
-  }
+
+  regContrasena.addEventListener('input', validarContrasenas);
+  regConfirmarContrasena.addEventListener('input', validarContrasenas);
+
+  formularioRegistro.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    validarContrasenas();
+    formularioRegistro.classList.add('was-validated');
+    if (!formularioRegistro.checkValidity()) return;
+
+    const datos = {
+      nombre: document.getElementById('regNombre').value.trim(),
+      correo: document.getElementById('regEmail').value.trim(),
+      password: regContrasena.value,
+    };
+    enviarAutenticacion(formularioRegistro, errorRegistro, () => api.registrar(datos));
+  });
   // [IA] fin
 });

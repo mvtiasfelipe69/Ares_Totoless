@@ -48,6 +48,15 @@
         }
       },
 
+      // [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md
+      // Reemplaza los datos del usuario activo (por ejemplo, después de editar el perfil).
+      actualizar(usuario) {
+        const { contrasena, password, ...publico } = usuario;
+        this.usuario = publico;
+        localStorage.setItem(CLAVE_SESION, JSON.stringify(publico));
+      },
+      // [IA] fin
+
       // Cierra la sesión: borra memoria, localStorage y saca al usuario de vistas privadas.
       cerrar() {
         this.usuario = null;

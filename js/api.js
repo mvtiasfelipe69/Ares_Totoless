@@ -1,4 +1,4 @@
-// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js.md
+// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js
 (() => {
   const CLAVE_CONFIG = 'aresTotoless:config'; // { forzarError: 500, probFalla: 0.3 }
   const cache = {};
@@ -57,15 +57,37 @@
     }
   }
 
-  // Todos los usuarios: los 10 de mocks/usuarios.json + los registrados en este navegador.
+  // Todos los usuarios: los 10 de mocks/usuarios.json + los registrados en este navegador,
+  // con los nombres editados desde el perfil ya aplicados.
   async function leerUsuarios() {
-    return [...(await leerMock('usuarios')), ...leerRegistrados()];
+    return aplicarCambiosDePerfil([...(await leerMock('usuarios')), ...leerRegistrados()]);
   }
 
   // Copia del usuario sin la contraseña: la API nunca la devuelve.
   function sinPassword(usuario) {
     const { password, ...publico } = usuario;
     return publico;
+  }
+  // [IA] fin
+
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md
+  // Cambios hechos desde "Mi perfil", guardados como { "<id>": { nombre } }.
+  // Los mocks son de solo lectura, así que los cambios viven aparte y se aplican al leer.
+  const CLAVE_PERFILES = 'aresTotoless:perfiles';
+  const PREFIJO = 'aresTotoless:'; // todas las claves de la app empiezan así
+  const REGEX_NOMBRE = /^\p{L}[\p{L} '.-]*$/u; // letras (con tildes y ñ), espacios, ' . -
+
+  function leerCambiosDePerfil() {
+    try {
+      return JSON.parse(localStorage.getItem(CLAVE_PERFILES)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function aplicarCambiosDePerfil(usuarios) {
+    const cambios = leerCambiosDePerfil();
+    return usuarios.map((u) => (cambios[u.id] ? { ...u, ...cambios[u.id] } : u));
   }
   // [IA] fin
 
@@ -114,6 +136,29 @@
         };
         localStorage.setItem(CLAVE_USUARIOS, JSON.stringify([...leerRegistrados(), nuevo]));
         return ok(201, sinPassword(nuevo));
+      });
+    },
+    // [IA] fin
+
+    // [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md
+    // PATCH /api/usuarios/:id   cuerpo: { nombre }
+    actualizarPerfil(id, cambios = {}, opts = {}) {
+      return ejecutar(opts, async () => {
+        const nombre = String(cambios.nombre || '').trim().replace(/\s+/g, ' ');
+        if (nombre.length < 2 || nombre.length > 40) {
+          return fallo(400, 'El nombre debe tener entre 2 y 40 caracteres');
+        }
+        if (!REGEX_NOMBRE.test(nombre)) {
+          return fallo(400, 'El nombre solo puede tener letras, espacios, apóstrofes o guiones');
+        }
+
+        const usuario = (await leerUsuarios()).find((u) => u.id === String(id));
+        if (!usuario) return fallo(404, 'Usuario no encontrado');
+
+        const guardados = leerCambiosDePerfil();
+        guardados[usuario.id] = { ...guardados[usuario.id], nombre };
+        localStorage.setItem(CLAVE_PERFILES, JSON.stringify(guardados));
+        return ok(200, sinPassword({ ...usuario, nombre }));
       });
     },
     // [IA] fin
@@ -169,5 +214,36 @@
       return ejecutar(opts, async () => ok(200, await leerMock('generos')));
     },
   };
+
+  // [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md
+  // Herramientas del simulador (no son endpoints: no pasan por ejecutar(), así nunca fallan).
+  window.api.simulador = {
+    // { forzarError: 0 | código HTTP, probFalla: 0..1 }
+    leer() {
+      const cfg = leerConfig();
+      return {
+        forzarError: Number(cfg.forzarError) || (cfg.forzarError === true ? 500 : 0),
+        probFalla: Math.min(1, Math.max(0, Number(cfg.probFalla) || 0)),
+      };
+    },
+
+    guardar({ forzarError = 0, probFalla = 0 } = {}) {
+      const cfg = {
+        forzarError: Number(forzarError) || 0,
+        probFalla: Math.min(1, Math.max(0, Number(probFalla) || 0)),
+      };
+      localStorage.setItem(CLAVE_CONFIG, JSON.stringify(cfg));
+      return cfg;
+    },
+
+    // Borra todo lo que la app guardó en este navegador (claves "aresTotoless:...").
+    restablecer() {
+      Object.keys(localStorage)
+        .filter((clave) => clave.startsWith(PREFIJO))
+        .forEach((clave) => localStorage.removeItem(clave));
+      Object.keys(cache).forEach((nombre) => delete cache[nombre]);
+    },
+  };
+  // [IA] fin
 })();
 // [IA] fin
