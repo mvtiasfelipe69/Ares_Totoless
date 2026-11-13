@@ -14,7 +14,9 @@
         hash: location.hash || '#vista_musica',
         get ruta() { return this.hash.split('/')[0]; },
         get param() { return this.hash.split('/')[1] || null; }
-      }" x-init="$store.catalogo.cargar()" @hashchange.window="hash = location.hash || '#vista_musica'">
+      }"
+      x-init="$store.catalogo.cargar(); $store.playlists.cargar()"
+      @hashchange.window="hash = location.hash || '#vista_musica'">
 
   <header class="border-bottom sticky-top">
     <nav class="navbar navbar-expand-md container py-2">
@@ -100,40 +102,33 @@
           <div id="vista_musica" class="panel-contenido" x-show="ruta === '#vista_musica'">
             <h1 class="h4 mb-3">Tu música</h1>
 
-            <div class="row row-cols-2 row-cols-md-4 g-3 mb-4" id="grid_playlists">
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">Favoritos</h2>
-                    <p class="card-text small text-muted mb-0">Canciones guardadas</p>
-                  </div>
+            <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
+            <div class="mb-4">
+              <template x-if="!$store.sesion.activa">
+                <div class="border border-secondary rounded p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                  <span class="small text-secondary">Inicia sesión para ver tus playlists personalizadas.</span>
+                  <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                    Iniciar sesión
+                  </button>
                 </div>
-              </div>
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">Para josear</h2>
-                    <p class="card-text small text-muted mb-0">six seven</p>
-                  </div>
+              </template>
+
+              <template x-if="$store.sesion.activa && $store.playlists.lista.length">
+                <div class="row row-cols-2 row-cols-md-4 g-3" id="grid_playlists">
+                  <template x-for="pl in $store.playlists.lista.slice(0, 4)" :key="pl.id">
+                    <div class="col">
+                      <a :href="'#playlist/' + pl.id" class="card h-100 shadow-sm text-decoration-none text-light tarjeta-playlist">
+                        <div class="card-body">
+                          <h2 class="h6 card-title mb-1" x-text="pl.nombre"></h2>
+                          <p class="card-text small text-secondary mb-0" x-text="pl.descripcion || 'Sin descripción'"></p>
+                        </div>
+                      </a>
+                    </div>
+                  </template>
                 </div>
-              </div>
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">GYM</h2>
-                    <p class="card-text small text-muted mb-0">redy para farmear</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">kizazo</h2>
-                    <p class="card-text small text-muted mb-0">enfaki</p>
-                  </div>
-                </div>
-              </div>
+              </template>
             </div>
+            <!-- [IA] fin -->
 
             <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
             <div x-show="$store.catalogo.cargando" class="text-center py-5">
@@ -158,7 +153,7 @@
                   </tr>
                 </thead>
                 <tbody id="lista_canciones">
-                  <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+                  <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
                   <template x-for="c in $store.catalogo.canciones" :key="c.id">
                     <tr :data-song_id="c.id">
                       <td>
@@ -176,90 +171,156 @@
             </div>
           </div>
 
+          <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
           <!-- VISTA: PLAYLISTS -->
           <div id="vista_playlists" class="panel-contenido" x-show="ruta === '#vista_playlists'" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h1 class="h4 mb-0">Playlists</h1>
-              <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
-                data-bs-target="#modalCrearPlaylist">
+              <h1 class="h4 mb-0">Mis Playlists</h1>
+              <button class="btn btn-primary btn-sm" type="button" @click="$store.playlists.abrirCrear()">
                 + Crear playlist
               </button>
             </div>
 
-            <div class="row row-cols-2 row-cols-md-4 g-3" id="contenedor_lista_playlists">
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">Favoritos</h2>
-                    <p class="card-text small text-muted mb-0">Canciones guardadas</p>
+            <!-- Cargando -->
+            <div x-show="$store.playlists.cargando" class="text-center py-5">
+              <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+            </div>
+
+            <!-- Error -->
+            <div x-show="!$store.playlists.cargando && !!$store.playlists.error"
+              :class="{'d-flex': $store.playlists.error}"
+              class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
+              <span x-text="$store.playlists.error"></span>
+              <button type="button" class="btn btn-sm btn-outline-light" @click="$store.playlists.cargar()">Reintentar</button>
+            </div>
+
+            <!-- Vacío -->
+            <div x-show="!$store.playlists.cargando && !$store.playlists.error && !$store.playlists.lista.length"
+              class="border border-secondary rounded p-4 text-center text-secondary" style="display: none;">
+              Aún no tienes playlists. Crea la primera con el botón superior.
+            </div>
+
+            <!-- Grid de playlists -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3"
+              x-show="!$store.playlists.cargando && !$store.playlists.error && $store.playlists.lista.length">
+              <template x-for="pl in $store.playlists.lista" :key="pl.id">
+                <div class="col">
+                  <div class="card h-100 shadow-sm tarjeta-playlist">
+                    <a :href="'#playlist/' + pl.id" class="card-body text-decoration-none text-light">
+                      <h2 class="h6 card-title mb-1" x-text="pl.nombre"></h2>
+                      <p class="card-text small text-secondary mb-2" x-text="pl.descripcion || 'Sin descripción'"></p>
+                      <span class="badge text-bg-secondary" x-text="(pl.totalCanciones ?? pl.cancionIds?.length ?? 0) + ' canciones'"></span>
+                    </a>
+                    <div class="card-footer bg-transparent border-secondary d-flex justify-content-end gap-2">
+                      <button type="button" class="btn btn-outline-secondary btn-sm" @click="$store.playlists.abrirEditar(pl)">
+                        Editar
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm" @click="$store.playlists.pedirEliminar(pl)">
+                        Eliminar
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">Para josear</h2>
-                    <p class="card-text small text-muted mb-0">six seven</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">GYM</h2>
-                    <p class="card-text small text-muted mb-0">redy para farmear</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card h-100 shadow-sm tarjeta-playlist" role="button">
-                  <div class="card-body">
-                    <h2 class="h6 card-title mb-1">kizazo</h2>
-                    <p class="card-text small text-muted mb-0">enfaki</p>
-                  </div>
-                </div>
-              </div>
+              </template>
             </div>
           </div>
 
-          <!-- VISTA: DETALLE PLAYLIST -->
-          <div id="vista_detalle_playlist" class="panel-contenido" x-show="ruta.startsWith('#playlist')"
+          <!-- VISTA: DETALLE PLAYLIST (#playlist/ID) -->
+          <div id="vista_detalle_playlist" class="panel-contenido" x-show="ruta === '#playlist'"
+            x-effect="if (ruta === '#playlist' && param) $store.playlists.cargarDetalle(param)"
             style="display: none;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <a href="#vista_playlists" class="btn btn-outline-secondary btn-sm" id="btn_volver_playlists">← Volver</a>
-              <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal"
-                data-bs-target="#modalAgregarCancion">
-                + Añadir canción
-              </button>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <a href="#vista_playlists" class="btn btn-outline-secondary btn-sm">← Volver</a>
+
+              <div class="d-flex gap-2" x-show="$store.playlists.actual">
+                <button class="btn btn-outline-secondary btn-sm" type="button"
+                  @click="$store.playlists.abrirEditar($store.playlists.actual)">
+                  Editar
+                </button>
+                <button class="btn btn-outline-danger btn-sm" type="button"
+                  @click="$store.playlists.pedirEliminar($store.playlists.actual)">
+                  Eliminar
+                </button>
+                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
+                  data-bs-target="#modalAgregarCancion" @click="$store.playlists.busquedaCancion = ''">
+                  + Añadir canción
+                </button>
+              </div>
             </div>
 
-            <div class="p-4 bg-dark rounded border border-secondary mb-4">
-              <h1 class="h4 mb-1" id="detalle_playlist_titulo">Nombre Playlist</h1>
-              <p class="text-muted small mb-0" id="detalle_playlist_desc">Descripción</p>
+            <!-- Cargando detalle -->
+            <div x-show="$store.playlists.cargandoDetalle" class="text-center py-5">
+              <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
 
-            <div id="mensaje_playlist_vacia" class="border border-secondary rounded p-4 text-center text-muted">
-              Esta playlist no contiene canciones aún.
+            <!-- Error / 404 -->
+            <div x-show="!$store.playlists.cargandoDetalle && !!$store.playlists.errorDetalle"
+              :class="{'d-flex': $store.playlists.errorDetalle}"
+              class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
+              <span x-text="$store.playlists.statusDetalle === 404 ? 'Esta playlist no existe o no tienes acceso.' : $store.playlists.errorDetalle"></span>
+              <button type="button" class="btn btn-sm btn-outline-light"
+                x-show="$store.playlists.statusDetalle !== 404"
+                @click="$store.playlists.cargarDetalle(param)">Reintentar</button>
             </div>
 
-            <div class="table-responsive d-none" id="contenedor_tabla_playlist">
-              <table class="table table-hover align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th scope="col" style="width: 50px;"></th>
-                    <th scope="col">Título</th>
-                    <th scope="col">Artista</th>
-                    <th scope="col" class="text-end">Duración</th>
-                  </tr>
-                </thead>
-                <tbody id="lista_canciones_playlist"></tbody>
-              </table>
-            </div>
+            <!-- Contenido de la playlist -->
+            <template x-if="!$store.playlists.cargandoDetalle && $store.playlists.actual">
+              <div>
+                <div class="p-4 bg-dark rounded border border-secondary mb-4">
+                  <p class="text-uppercase small text-secondary mb-1">Playlist</p>
+                  <h1 class="h4 mb-1" x-text="$store.playlists.actual.nombre"></h1>
+                  <p class="text-secondary small mb-0" x-text="$store.playlists.actual.descripcion || 'Sin descripción'"></p>
+                </div>
+
+                <div x-show="!$store.playlists.actual.canciones.length"
+                  class="border border-secondary rounded p-4 text-center text-secondary">
+                  Esta playlist no contiene canciones aún. Usa "+ Añadir canción" para agregar temas del catálogo.
+                </div>
+
+                <div class="table-responsive" x-show="$store.playlists.actual.canciones.length">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col" style="width: 50px;"></th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Artista</th>
+                        <th scope="col">Álbum</th>
+                        <th scope="col" class="text-end">Duración</th>
+                        <th scope="col" class="text-end" style="width: 90px;"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template x-for="c in $store.playlists.actual.canciones" :key="c.id">
+                        <tr :data-song_id="c.id">
+                          <td>
+                            <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                          </td>
+                          <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
+                          <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
+                          <td x-text="c.album"></td>
+                          <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
+                          <td class="text-end">
+                            <button type="button" class="btn btn-outline-danger btn-sm"
+                              :disabled="$store.playlists.procesandoCancionId === c.id"
+                              @click="$store.playlists.quitarCancion(c.id)"
+                              :aria-label="'Quitar ' + c.titulo">
+                              Quitar
+                            </button>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </template>
           </div>
+          <!-- [IA] fin -->
 
           <!-- VISTA: EXPLORAR -->
           <div id="vista_explorar" class="panel-contenido" x-show="ruta === '#vista_explorar'" x-data="explorar()" style="display: none;">
-            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
             <h1 class="h4 mb-3">Explorar géneros</h1>
             <div class="row row-cols-2 row-cols-md-4 g-3">
               <template x-for="g in $store.catalogo.generos" :key="g.id">
@@ -355,7 +416,7 @@
             x-effect="if (ruta === '#cancion' && param) cargar(param)" style="display: none;">
             <a href="#vista_musica" class="btn btn-outline-secondary btn-sm mb-3">← Volver</a>
             
-            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+            <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
             <div x-show="cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
@@ -385,7 +446,7 @@
           </div>
 
           <!-- VISTA: DETALLE ARTISTA (#artista/ID) -->
-          <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2 -->
+          <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
           <div id="vista_artista" class="panel-contenido" x-show="ruta === '#artista'" x-data="detalleArtista()"
             x-effect="if (ruta === '#artista' && param) cargar(param)" style="display: none;">
             <a href="#vista_explorar" class="btn btn-outline-secondary btn-sm mb-3">← Volver</a>
@@ -621,80 +682,108 @@
     </div>
   </aside>
 
-  <div class="modal fade" id="modalCrearPlaylist" tabindex="-1" aria-labelledby="modalCrearPlaylistLabel"
-    aria-hidden="true">
+  <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
+  <!-- MODAL: CREAR / EDITAR PLAYLIST -->
+  <div class="modal fade" id="modalFormPlaylist" tabindex="-1" aria-labelledby="modalFormPlaylistLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title fs-5" id="modalCrearPlaylistLabel">Crear playlist</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h2 class="modal-title fs-5" id="modalFormPlaylistLabel"
+            x-text="$store.playlists.form.modo === 'crear' ? 'Crear playlist' : 'Editar playlist'"></h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="form_crear_playlist" novalidate>
+          <form novalidate @submit.prevent="$store.playlists.guardar()">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="inputNombrePlaylist" placeholder="Nombre" required>
+              <input type="text" class="form-control" id="inputNombrePlaylist" placeholder="Nombre" maxlength="40"
+                x-model="$store.playlists.form.nombre"
+                :class="{ 'is-invalid': $store.playlists.form.errorNombre }"
+                :disabled="$store.playlists.form.enviando"
+                @input="$store.playlists.form.errorNombre = ''; $store.playlists.form.errorServidor = ''">
               <label for="inputNombrePlaylist">Nombre de la playlist</label>
-              <div class="invalid-feedback">Ingresa un nombre para la playlist.</div>
+              <div class="invalid-feedback" x-text="$store.playlists.form.errorNombre"></div>
             </div>
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="inputDescPlaylist" placeholder="Descripción">
-              <label for="inputDescPlaylist">Descripción breve</label>
+              <input type="text" class="form-control" id="inputDescPlaylist" placeholder="Descripción" maxlength="100"
+                x-model="$store.playlists.form.descripcion"
+                :disabled="$store.playlists.form.enviando">
+              <label for="inputDescPlaylist">Descripción breve (opcional)</label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Crear</button>
+
+            <div class="alert alert-danger py-2 small" role="alert"
+              x-show="$store.playlists.form.errorServidor"
+              x-text="$store.playlists.form.errorServidor" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-primary w-100" :disabled="$store.playlists.form.enviando">
+              <span x-show="$store.playlists.form.enviando" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              <span x-text="$store.playlists.form.enviando ? 'Guardando…' : ($store.playlists.form.modo === 'crear' ? 'Crear' : 'Guardar cambios')"></span>
+            </button>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="modalAgregarCancion" tabindex="-1" aria-labelledby="modalAgregarCancionLabel"
-    aria-hidden="true">
+  <!-- MODAL: CONFIRMAR ELIMINAR PLAYLIST -->
+  <div class="modal fade" id="modalEliminarPlaylist" tabindex="-1" aria-labelledby="modalEliminarPlaylistLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title fs-5" id="modalAgregarCancionLabel">Añadir canción</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h2 class="modal-title fs-5" id="modalEliminarPlaylistLabel">Eliminar playlist</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <div class="modal-body p-0">
-          <ul class="list-group list-group-flush" id="lista_canciones_disponibles">
-            <li
-              class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent text-light border-secondary">
-              <div>
-                <div class="fw-semibold">Canción 1</div>
-                <div class="text-secondary small">Banda • Álbum (6:66)</div>
-              </div>
-              <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 1"
-                data-artista="Banda" data-duracion="6:66">
-                Añadir
-              </button>
-            </li>
-            <li
-              class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent text-light border-secondary">
-              <div>
-                <div class="fw-semibold">Canción 2</div>
-                <div class="text-secondary small">Banda • Album (6:66)</div>
-              </div>
-              <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 2"
-                data-artista="Banda" data-duracion="6:66">
-                Añadir
-              </button>
-            </li>
-            <li
-              class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent text-light border-secondary">
-              <div>
-                <div class="fw-semibold">Canción 3</div>
-                <div class="text-secondary small">Banda • Album (6:66)</div>
-              </div>
-              <button class="btn btn-sm btn-outline-primary btn-agregar-item" type="button" data-titulo="Canción 3"
-                data-artista="Banda" data-duracion="6:66">
-                Añadir
-              </button>
-            </li>
+        <div class="modal-body">
+          <p class="mb-0">¿Seguro que quieres eliminar <strong x-text="$store.playlists.aEliminar?.nombre"></strong>? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" :disabled="$store.playlists.eliminando">Cancelar</button>
+          <button type="button" class="btn btn-danger" :disabled="$store.playlists.eliminando" @click="$store.playlists.confirmarEliminar()">
+            <span x-show="$store.playlists.eliminando" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+            <span x-text="$store.playlists.eliminando ? 'Eliminando…' : 'Sí, eliminar'"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AÑADIR CANCIÓN DESDE CATÁLOGO -->
+  <div class="modal fade" id="modalAgregarCancion" tabindex="-1" aria-labelledby="modalAgregarCancionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modalAgregarCancionLabel">Añadir canción</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <label for="buscarCancionPlaylist" class="visually-hidden">Buscar canción en el catálogo</label>
+          <input type="search" id="buscarCancionPlaylist" class="form-control mb-3"
+            placeholder="Buscar por título o artista..."
+            x-model="$store.playlists.busquedaCancion">
+
+          <div x-show="!$store.playlists.cancionesFiltradasModal.length" class="text-center text-secondary small py-3">
+            No hay canciones disponibles para añadir.
+          </div>
+
+          <ul class="list-group list-group-flush">
+            <template x-for="c in $store.playlists.cancionesFiltradasModal" :key="c.id">
+              <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-light border-secondary px-0">
+                <div class="me-2 text-truncate">
+                  <div class="fw-semibold text-truncate" x-text="c.titulo"></div>
+                  <div class="text-secondary small text-truncate" x-text="c.artista + ' • ' + $store.catalogo.fmt(c.duracion)"></div>
+                </div>
+                <button class="btn btn-sm btn-outline-primary flex-shrink-0" type="button"
+                  :disabled="$store.playlists.procesandoCancionId === c.id"
+                  @click="$store.playlists.agregarCancion(c.id)">
+                  Añadir
+                </button>
+              </li>
+            </template>
           </ul>
         </div>
       </div>
     </div>
   </div>
+  <!-- [IA] fin -->
 
   <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_arreglo-formularios.md -->
   <!-- Modales de login/registro como componentes Alpine (js/formularios.js) y toasts globales (js/toasts.js). -->
@@ -835,6 +924,9 @@
   <!-- [IA] fin -->
   <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md -->
   <script src="js/perfil.js"></script>
+  <!-- [IA] fin -->
+  <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
+  <script src="js/playlists.js"></script>
   <!-- [IA] fin -->
   <script src="js/app.js"></script>
 </body>
