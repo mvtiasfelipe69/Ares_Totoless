@@ -1,4 +1,3 @@
-// [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md
 document.addEventListener('alpine:init', () => {
   // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md
   Alpine.store('reproductor', {
@@ -64,6 +63,8 @@ document.addEventListener('alpine:init', () => {
     },
   });
   // [IA] fin
+
+  // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md
   Alpine.store('playlists', {
     lista: [],
     cargando: false,
@@ -257,5 +258,30 @@ document.addEventListener('alpine:init', () => {
       await this.cargar();
     },
   });
+  // [IA] fin
+
+  // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md
+  Alpine.data('adminUsuarios', () => ({
+    usuarios: [],
+    cargando: false,
+    error: null,
+
+    async cargar() {
+      const sesion = Alpine.store('sesion');
+      if (!sesion?.activa || sesion.usuario?.rol !== 'admin') {
+        this.usuarios = [];
+        return;
+      }
+      this.cargando = true;
+      this.error = null;
+      const res = await window.api.getUsuarios();
+      this.cargando = false;
+      if (!res.ok) {
+        this.error = res.error;
+        return;
+      }
+      this.usuarios = res.data;
+    },
+  }));
+  // [IA] fin
 });
-// [IA] fin

@@ -10,7 +10,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.5/dist/cdn.min.js"></script>
 </head>
 
-<body class="pb-5" x-data="{
+<body class="pb-5 mb-5" x-data="{
         hash: location.hash || '#vista_musica',
         get ruta() { return this.hash.split('/')[0]; },
         get param() { return this.hash.split('/')[1] || null; }
@@ -92,6 +92,11 @@
               <a class="nav-link" :class="{ 'active': ruta === '#perfil' }" href="#perfil">Mi perfil</a>
             </li>
             <!-- [IA] fin -->
+            <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md -->
+            <li class="nav-item" x-show="$store.sesion.activa && $store.sesion.usuario?.rol === 'admin'" style="display: none;">
+              <a class="nav-link" :class="{ 'active': ruta === '#admin' }" href="#admin">Administración</a>
+            </li>
+            <!-- [IA] fin -->
           </ul>
         </aside>
 
@@ -100,7 +105,19 @@
 
           <!-- VISTA: TU MÚSICA -->
           <div id="vista_musica" class="panel-contenido" x-show="ruta === '#vista_musica'">
-            <h1 class="h4 mb-3">Tu música</h1>
+            <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <div>
+                <h1 class="h4 mb-0"
+                  x-text="$store.sesion.activa ? 'Hola, ' + $store.sesion.nombre : 'Tu música'">Tu música</h1>
+                <p class="small text-secondary mb-0"
+                  x-text="$store.sesion.activa ? 'Tus playlists y el catálogo listo para reproducir.' : 'Explora el catálogo o inicia sesión para gestionar tus playlists.'"></p>
+              </div>
+              <a x-show="$store.sesion.activa" href="#vista_playlists" class="btn btn-outline-primary btn-sm" style="display: none;">
+                Ver todas mis playlists
+              </a>
+            </div>
+            <!-- [IA] fin -->
 
             <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
             <div class="mb-4">
@@ -668,9 +685,67 @@
           </div>
           <!-- [IA] fin -->
 
-          <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md (se agregó '#perfil' a las rutas conocidas) -->
+          <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md -->
+          <!-- VISTA: ADMINISTRACIÓN (#admin, protegida por rol) -->
+          <div id="vista_admin" class="panel-contenido" x-show="ruta === '#admin'" x-data="adminUsuarios()"
+            x-effect="if (ruta === '#admin') cargar()" style="display: none;">
+            <h1 class="h4 mb-3">Panel de administración</h1>
+
+            <template x-if="!$store.sesion.activa || $store.sesion.usuario?.rol !== 'admin'">
+              <div class="alert alert-warning" role="alert">
+                Acceso restringido. Esta sección solo está disponible para cuentas con rol de administrador.
+              </div>
+            </template>
+
+            <template x-if="$store.sesion.activa && $store.sesion.usuario?.rol === 'admin'">
+              <div>
+                <div x-show="cargando" class="text-center py-5">
+                  <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+                </div>
+
+                <div x-show="!cargando && !!error" :class="{'d-flex': error}"
+                  class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
+                  <span x-text="error"></span>
+                  <button type="button" class="btn btn-sm btn-outline-light" @click="cargar()">Reintentar</button>
+                </div>
+
+                <div class="table-responsive" x-show="!cargando && !error && usuarios.length">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Plan</th>
+                        <th scope="col">Registro</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template x-for="u in usuarios" :key="u.id">
+                        <tr>
+                          <td x-text="u.id"></td>
+                          <td class="fw-semibold" x-text="u.nombre"></td>
+                          <td x-text="u.correo"></td>
+                          <td>
+                            <span class="badge" :class="u.rol === 'admin' ? 'text-bg-primary' : 'text-bg-secondary'"
+                              x-text="u.rol"></span>
+                          </td>
+                          <td x-text="u.plan"></td>
+                          <td x-text="u.creadoEn"></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </template>
+          </div>
+          <!-- [IA] fin -->
+
+          <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md (se agregó '#perfil' a las rutas conocidas; actualizado con '#admin') -->
           <div id="vista_404" class="panel-contenido text-center py-5"
-            x-show="!['#vista_musica','#vista_playlists','#vista_explorar','#cancion','#artista','#perfil'].includes(ruta) && !ruta.startsWith('#playlist')"
+            x-show="!['#vista_musica','#vista_playlists','#vista_explorar','#cancion','#artista','#perfil','#admin'].includes(ruta) && !ruta.startsWith('#playlist')"
             style="display: none;">
             <h1 class="display-1 fw-bold text-secondary">404</h1>
             <p class="lead">Página no encontrada</p>

@@ -1,4 +1,4 @@
-// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js
+// [IA] inicio · ia/2026-11-11_mvtiasfelipe69_api_js.md
 (() => {
   const CLAVE_CONFIG = 'aresTotoless:config'; // { forzarError: 500, probFalla: 0.3 }
   const cache = {};
@@ -91,6 +91,71 @@
   }
   // [IA] fin
 
+  // [IA] inicio · ia/2026-11-12_mvtiasfelipe69_playlists-api.md
+  const CLAVE_PLAYLISTS = 'aresTotoless:playlists';
+  const CLAVE_SESION = 'aresTotoless:sesion';
+
+  const copiar = (x) => JSON.parse(JSON.stringify(x));
+
+  function usuarioActual() {
+    try {
+      const u = JSON.parse(localStorage.getItem(CLAVE_SESION));
+      return u && u.id ? { ...u, id: String(u.id) } : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function leerPlaylists() {
+    try {
+      const guardadas = JSON.parse(localStorage.getItem(CLAVE_PLAYLISTS));
+      if (Array.isArray(guardadas)) return guardadas;
+    } catch {
+      /* JSON corrupto: se parte de la semilla */
+    }
+    return copiar(await leerMock('playlists'));
+  }
+
+  const guardarPlaylists = (lista) => localStorage.setItem(CLAVE_PLAYLISTS, JSON.stringify(lista));
+
+  function validarPlaylist(datos) {
+    const nombre = String(datos.nombre || '').trim().replace(/\s+/g, ' ');
+    const descripcion = String(datos.descripcion || '').trim();
+    if (nombre.length < 2 || nombre.length > 40) {
+      return { error: 'El nombre debe tener entre 2 y 40 caracteres' };
+    }
+    if (descripcion.length > 100) {
+      return { error: 'La descripción puede tener como máximo 100 caracteres' };
+    }
+    return { nombre, descripcion };
+  }
+
+  const nombreRepetido = (lista, usuarioId, nombre, ignorarId = null) =>
+    lista.some(
+      (p) =>
+        p.usuarioId === usuarioId &&
+        p.id !== String(ignorarId) &&
+        p.nombre.toLowerCase() === nombre.toLowerCase()
+    );
+
+  function conSesion(opts, fn) {
+    return ejecutar(opts, async () => {
+      const usuario = usuarioActual();
+      if (!usuario) return fallo(401, 'Inicia sesión para usar tus playlists');
+      return fn(usuario);
+    });
+  }
+
+  function sobrePlaylist(id, opts, fn) {
+    return conSesion(opts, async (usuario) => {
+      const lista = await leerPlaylists();
+      const playlist = lista.find((p) => p.id === String(id) && p.usuarioId === usuario.id);
+      if (!playlist) return fallo(404, 'Playlist no encontrada');
+      return fn({ usuario, lista, playlist });
+    });
+  }
+  // [IA] fin
+
   window.api = {
     // [IA] inicio · ia/2026-11-12_yisuscrist67_auth-usuarios.md
     // POST /api/auth/login   cuerpo: { correo, password }
@@ -163,6 +228,16 @@
     },
     // [IA] fin
 
+    // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md
+    // GET /api/usuarios (perfiles públicos para administración)
+    getUsuarios(opts = {}) {
+      return ejecutar(opts, async () => {
+        const usuarios = await leerUsuarios();
+        return ok(200, usuarios.map(sinPassword));
+      });
+    },
+    // [IA] fin
+
     // GET /api/canciones?busqueda=&genero=
     getCanciones(opts = {}) {
       return ejecutar(opts, async () => {
@@ -213,78 +288,8 @@
     getGeneros(opts = {}) {
       return ejecutar(opts, async () => ok(200, await leerMock('generos')));
     },
-  };
 
-  // [IA] inicio · ia/2026-11-12_mvtiasfelipe69_playlists-api.md
-  const CLAVE_PLAYLISTS = 'aresTotoless:playlists';
-  const CLAVE_SESION = 'aresTotoless:sesion';
-
-  const copiar = (x) => JSON.parse(JSON.stringify(x));
-
-  // Usuario con sesión activa (lo guarda Alpine.store('sesion')), o null.
-  function usuarioActual() {
-    try {
-      const u = JSON.parse(localStorage.getItem(CLAVE_SESION));
-      return u && u.id ? { ...u, id: String(u.id) } : null;
-    } catch {
-      return null;
-    }
-  }
-
-  // Si ya hay cambios en localStorage se usan esos; si no, se parte de la semilla del mock.
-  async function leerPlaylists() {
-    try {
-      const guardadas = JSON.parse(localStorage.getItem(CLAVE_PLAYLISTS));
-      if (Array.isArray(guardadas)) return guardadas;
-    } catch {
-      /* JSON corrupto: se parte de la semilla */
-    }
-    return copiar(await leerMock('playlists'));
-  }
-
-  const guardarPlaylists = (lista) => localStorage.setItem(CLAVE_PLAYLISTS, JSON.stringify(lista));
-
-  // Devuelve { nombre, descripcion } limpios, o { error }.
-  function validarPlaylist(datos) {
-    const nombre = String(datos.nombre || '').trim().replace(/\s+/g, ' ');
-    const descripcion = String(datos.descripcion || '').trim();
-    if (nombre.length < 2 || nombre.length > 40) {
-      return { error: 'El nombre debe tener entre 2 y 40 caracteres' };
-    }
-    if (descripcion.length > 100) {
-      return { error: 'La descripción puede tener como máximo 100 caracteres' };
-    }
-    return { nombre, descripcion };
-  }
-
-  const nombreRepetido = (lista, usuarioId, nombre, ignorarId = null) =>
-    lista.some(
-      (p) =>
-        p.usuarioId === usuarioId &&
-        p.id !== String(ignorarId) &&
-        p.nombre.toLowerCase() === nombre.toLowerCase()
-    );
-
-  // Endpoints que exigen sesión (401 si no hay).
-  function conSesion(opts, fn) {
-    return ejecutar(opts, async () => {
-      const usuario = usuarioActual();
-      if (!usuario) return fallo(401, 'Inicia sesión para usar tus playlists');
-      return fn(usuario);
-    });
-  }
-
-  // Endpoints sobre una playlist propia (404 si no existe o es de otra persona).
-  function sobrePlaylist(id, opts, fn) {
-    return conSesion(opts, async (usuario) => {
-      const lista = await leerPlaylists();
-      const playlist = lista.find((p) => p.id === String(id) && p.usuarioId === usuario.id);
-      if (!playlist) return fallo(404, 'Playlist no encontrada');
-      return fn({ usuario, lista, playlist });
-    });
-  }
-
-  Object.assign(window.api, {
+    // [IA] inicio · ia/2026-11-12_mvtiasfelipe69_playlists-api.md
     // GET /api/playlists
     getPlaylists(opts = {}) {
       return conSesion(opts, async (usuario) => {
@@ -293,7 +298,7 @@
       });
     },
 
-    // GET /api/playlists/:id  (incluye las canciones completas)
+    // GET /api/playlists/:id
     getPlaylist(id, opts = {}) {
       return sobrePlaylist(id, opts, async ({ playlist }) => {
         const catalogo = await leerMock('canciones');
@@ -373,13 +378,12 @@
         return ok(200, playlist);
       });
     },
-  });
-  // [IA] fin
+    // [IA] fin
+  };
 
   // [IA] inicio · ia/2026-11-12_yisuscrist67_perfil.md
   // Herramientas del simulador (no son endpoints: no pasan por ejecutar(), así nunca fallan).
   window.api.simulador = {
-    // { forzarError: 0 | código HTTP, probFalla: 0..1 }
     leer() {
       const cfg = leerConfig();
       return {
