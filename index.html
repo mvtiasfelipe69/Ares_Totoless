@@ -153,11 +153,14 @@
                   </tr>
                 </thead>
                 <tbody id="lista_canciones">
-                  <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
+                  <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
                   <template x-for="c in $store.catalogo.canciones" :key="c.id">
-                    <tr :data-song_id="c.id">
+                    <tr :class="{ 'table-active': $store.reproductor.esActual(c.id) }">
                       <td>
-                        <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                        <button class="btn btn-sm btn-outline-primary" type="button"
+                          :aria-label="($store.reproductor.estaSonando(c.id) ? 'Pausar ' : 'Reproducir ') + c.titulo"
+                          @click="$store.reproductor.tocar(c)"
+                          x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                       </td>
                       <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
                       <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
@@ -291,10 +294,14 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
                       <template x-for="c in $store.playlists.actual.canciones" :key="c.id">
-                        <tr :data-song_id="c.id">
+                        <tr :class="{ 'table-active': $store.reproductor.esActual(c.id) }">
                           <td>
-                            <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                            <button class="btn btn-sm btn-outline-primary" type="button"
+                              :aria-label="($store.reproductor.estaSonando(c.id) ? 'Pausar ' : 'Reproducir ') + c.titulo"
+                              @click="$store.reproductor.tocar(c)"
+                              x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                           </td>
                           <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
                           <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
@@ -310,6 +317,7 @@
                           </td>
                         </tr>
                       </template>
+                      <!-- [IA] fin -->
                     </tbody>
                   </table>
                 </div>
@@ -386,10 +394,14 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
                     <template x-for="c in paginadas" :key="c.id">
-                      <tr :data-song_id="c.id">
+                      <tr :class="{ 'table-active': $store.reproductor.esActual(c.id) }">
                         <td>
-                          <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                          <button class="btn btn-sm btn-outline-primary" type="button"
+                            :aria-label="($store.reproductor.estaSonando(c.id) ? 'Pausar ' : 'Reproducir ') + c.titulo"
+                            @click="$store.reproductor.tocar(c)"
+                            x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                         </td>
                         <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
                         <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
@@ -397,6 +409,7 @@
                         <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
                       </tr>
                     </template>
+                    <!-- [IA] fin -->
                   </tbody>
                 </table>
               </div>
@@ -438,8 +451,12 @@
                 <p class="mb-3" id="cancion_artista">
                   <a class="link-light" :href="'#artista/' + cancion?.artistaId" x-text="cancion?.artista"></a>
                 </p>
-                <p class="small text-secondary mb-0" id="cancion_meta"
+                <p class="small text-secondary mb-3" id="cancion_meta"
                   x-text="cancion ? cancion.album + ' · ' + cancion.genero + ' · ' + cancion.anio + ' · ' + $store.catalogo.fmt(cancion.duracion) : ''"></p>
+                <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
+                <button type="button" class="btn btn-primary" @click="$store.reproductor.tocar(cancion)"
+                  x-text="$store.reproductor.estaSonando(cancion?.id) ? '⏸ Pausar' : '▶ Reproducir'"></button>
+                <!-- [IA] fin -->
               </div>
             </div>
             <!-- [IA] fin -->
@@ -489,10 +506,14 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
                       <template x-for="c in canciones" :key="c.id">
-                        <tr :data-song_id="c.id">
+                        <tr :class="{ 'table-active': $store.reproductor.esActual(c.id) }">
                           <td>
-                            <button class="btn btn-sm btn-outline-primary play_btn" type="button" :aria-label="'Reproducir ' + c.titulo">▶</button>
+                            <button class="btn btn-sm btn-outline-primary" type="button"
+                              :aria-label="($store.reproductor.estaSonando(c.id) ? 'Pausar ' : 'Reproducir ') + c.titulo"
+                              @click="$store.reproductor.tocar(c)"
+                              x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                           </td>
                           <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
                           <td x-text="c.artista"></td>
@@ -500,6 +521,7 @@
                           <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
                         </tr>
                       </template>
+                      <!-- [IA] fin -->
                     </tbody>
                   </table>
                 </div>
@@ -662,25 +684,39 @@
   </main>
   <!-- [IA] fin -->
 
+  <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
   <aside class="fixed-bottom bg-dark text-white border-top border-secondary py-2" id="reproductor_barra">
     <div class="container d-flex justify-content-between align-items-center">
       <div class="text-truncate me-3" style="max-width: 250px;">
-        <div class="small fw-bold" id="reproductor_nombre_cancion">Sin reproducir</div>
-        <div class="text-secondary small" id="reproductor_nombre_artista">—</div>
+        <div class="small fw-bold text-truncate" id="reproductor_nombre_cancion"
+          x-text="$store.reproductor.actual ? $store.reproductor.actual.titulo : 'Sin reproducir'"></div>
+        <div class="text-secondary small text-truncate" id="reproductor_nombre_artista"
+          x-text="$store.reproductor.actual ? $store.reproductor.actual.artista : '—'"></div>
       </div>
 
       <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-sm btn-light" id="btn_alternar_reproductor" type="button">▶</button>
+        <button class="btn btn-sm btn-light" id="btn_alternar_reproductor" type="button"
+          :disabled="!$store.reproductor.actual"
+          :aria-label="$store.reproductor.reproduciendo ? 'Pausar' : 'Reproducir'"
+          @click="$store.reproductor.alternar()"
+          x-text="$store.reproductor.reproduciendo ? '⏸' : '▶'"></button>
       </div>
 
       <div class="d-none d-md-flex align-items-center gap-2 text-secondary small">
-        <span id="reproductor_tiempo_actual">0:00</span>
-        <input type="range" class="form-range" id="reproductor_progreso" min="0" max="100" value="0"
+        <span id="reproductor_tiempo_actual" x-text="$store.catalogo.fmt($store.reproductor.progreso)">0:00</span>
+        <label for="reproductor_progreso" class="visually-hidden">Progreso de reproducción</label>
+        <input type="range" class="form-range" id="reproductor_progreso" min="0"
+          :max="$store.reproductor.actual ? $store.reproductor.actual.duracion : 100"
+          :value="$store.reproductor.progreso"
+          :disabled="!$store.reproductor.actual"
+          @input="$store.reproductor.buscarTiempo($event.target.value)"
           style="width: 150px;">
-        <span id="reproductor_duracion">0:00</span>
+        <span id="reproductor_duracion"
+          x-text="$store.reproductor.actual ? $store.catalogo.fmt($store.reproductor.actual.duracion) : '0:00'">0:00</span>
       </div>
     </div>
   </aside>
+  <!-- [IA] fin -->
 
   <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
   <!-- MODAL: CREAR / EDITAR PLAYLIST -->
@@ -928,7 +964,6 @@
   <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
   <script src="js/playlists.js"></script>
   <!-- [IA] fin -->
-  <script src="js/app.js"></script>
 </body>
 
 </html>

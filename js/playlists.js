@@ -1,5 +1,69 @@
 // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md
 document.addEventListener('alpine:init', () => {
+  // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md
+  Alpine.store('reproductor', {
+    actual: null,
+    reproduciendo: false,
+    progreso: 0,
+    _timer: null,
+
+    tocar(cancion) {
+      if (!cancion) return;
+      if (this.actual && this.actual.id === String(cancion.id)) {
+        this.alternar();
+        return;
+      }
+      this.actual = cancion;
+      this.reproduciendo = true;
+      this.progreso = 0;
+      this._iniciarTimer();
+    },
+
+    alternar() {
+      if (!this.actual) return;
+      this.reproduciendo = !this.reproduciendo;
+      if (this.reproduciendo) {
+        this._iniciarTimer();
+      } else {
+        this._detenerTimer();
+      }
+    },
+
+    buscarTiempo(segundos) {
+      if (!this.actual) return;
+      this.progreso = Math.min(this.actual.duracion, Math.max(0, Number(segundos) || 0));
+    },
+
+    esActual(id) {
+      return this.actual?.id === String(id);
+    },
+
+    estaSonando(id) {
+      return this.esActual(id) && this.reproduciendo;
+    },
+
+    _iniciarTimer() {
+      this._detenerTimer();
+      this._timer = setInterval(() => {
+        if (!this.reproduciendo || !this.actual) return;
+        if (this.progreso + 1 >= this.actual.duracion) {
+          this.progreso = 0;
+          this.reproduciendo = false;
+          this._detenerTimer();
+        } else {
+          this.progreso += 1;
+        }
+      }, 1000);
+    },
+
+    _detenerTimer() {
+      if (this._timer) {
+        clearInterval(this._timer);
+        this._timer = null;
+      }
+    },
+  });
+  // [IA] fin
   Alpine.store('playlists', {
     lista: [],
     cargando: false,
