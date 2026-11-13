@@ -64,7 +64,7 @@ document.addEventListener('alpine:init', () => {
   });
   // [IA] fin
 
-  // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md
+  // [IA] inicio · ia/2026-11-13_mvtiasfelipe69_index-playlists
   Alpine.store('playlists', {
     lista: [],
     cargando: false,
