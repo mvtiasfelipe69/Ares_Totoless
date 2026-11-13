@@ -36,9 +36,14 @@ js/
 - app.js
 README.md
 
-## Instalacion y ejecucion
+## Instalación y ejecución
 
-Para ejecutar el proyecto localmente, copia el repositorio y abre el archivo "index.html" en un navegador.
+1. Clona el repositorio: `git clone https://github.com/mvtiasfelipe69/Ares_Totoless.git`
+2. Abre la carpeta en VS Code.
+3. Instala la extensión **Live Server**.
+4. Haz clic derecho en `index.html` y elige **Open with Live Server**.
+
+> No abras `index.html` con doble clic (`file://`): la app carga sus datos con `fetch` y no funcionará.
 
 <!-- [IA] inicio · ia/2026-11-12_yisuscrist67_readme.md -->
 ## Credenciales de prueba
