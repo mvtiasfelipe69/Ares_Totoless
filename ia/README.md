@@ -10,3 +10,4 @@ Un archivo por interacción: `ia/AAAA-MM-DD_usuario-github_tema.md`.
 | 2026-11-12 | @yisuscrist67 | Formularios login/registro con Alpine + toasts globales | js/formularios.js, js/toasts.js, index.html, js/app.js | [2026-11-12_yisuscrist67_formularios-toasts.md](2026-11-12_yisuscrist67_formularios-toasts.md) |
 | 2026-11-12 | @yisuscrist67 | Arreglo: recuperar formularios Alpine y toasts tras el commit de perfil | index.html, js/app.js, ia/README.md | [2026-11-12_yisuscrist67_arreglo-formularios.md](2026-11-12_yisuscrist67_arreglo-formularios.md) |
 | 2026-11-12 | @yisuscrist67 | Sección README de sesión, credenciales y endpoints | README.md | [2026-11-12_yisuscrist67_readme.md](2026-11-12_yisuscrist67_readme.md) |
+| 2026-11-12 | @carlitos1009-udp | Store de sesión, validación de login y gestión completa de playlists | js/app.js | [2026-11-12_carlitos1009-udp_playlists.md](2026-11-12_carlitos1009-udp_playlists.md) |
