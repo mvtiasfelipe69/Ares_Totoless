@@ -1,0 +1,7 @@
+[
+  { "id": "1", "nombre": "Favoritos", "descripcion": "Lo que más escucho", "usuarioId": "1", "cancionIds": ["14", "12", "16"] },
+  { "id": "2", "nombre": "Para estudiar", "descripcion": "Electrónica e indie para concentrarse", "usuarioId": "1", "cancionIds": ["13", "18"] },
+  { "id": "3", "nombre": "Favoritos", "descripcion": "Canciones guardadas", "usuarioId": "2", "cancionIds": ["1", "2", "10"] },
+  { "id": "4", "nombre": "Gym", "descripcion": "Rage para entrenar", "usuarioId": "2", "cancionIds": ["7", "8", "9"] },
+  { "id": "5", "nombre": "Chile", "descripcion": "Música chilena", "usuarioId": "2", "cancionIds": ["4", "10", "11", "15", "17", "18"] }
+]
