@@ -14,9 +14,8 @@
         hash: location.hash || '#vista_musica',
         get ruta() { return this.hash.split('/')[0]; },
         get param() { return this.hash.split('/')[1] || null; }
-      }"
-      x-init="$store.catalogo.cargar(); $store.playlists.cargar()"
-      @hashchange.window="hash = location.hash || '#vista_musica'">
+      }" x-init="$store.catalogo.cargar(); $store.playlists.cargar()"
+  @hashchange.window="hash = location.hash || '#vista_musica'">
 
   <header class="border-bottom sticky-top">
     <nav class="navbar navbar-expand-md container py-2">
@@ -28,7 +27,8 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navPrincipal">
-        <form class="d-flex flex-grow-1 mx-md-4 my-2 my-md-0" role="search" id="form_busqueda" @submit.prevent="location.hash = '#vista_explorar'">
+        <form class="d-flex flex-grow-1 mx-md-4 my-2 my-md-0" role="search" id="form_busqueda"
+          @submit.prevent="location.hash = '#vista_explorar'">
           <div class="input-group">
             <input type="search" class="form-control" id="input_busqueda" placeholder="Buscar canciones, artistas..."
               aria-label="Buscar" required x-model="$store.catalogo.busqueda">
@@ -48,7 +48,8 @@
                 data-bs-target="#modalLogin">
                 Iniciar sesión
               </button>
-              <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalRegistro">
+              <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
+                data-bs-target="#modalRegistro">
                 Registrarse
               </button>
             </li>
@@ -93,7 +94,8 @@
             </li>
             <!-- [IA] fin -->
             <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md -->
-            <li class="nav-item" x-show="$store.sesion.activa && $store.sesion.usuario?.rol === 'admin'" style="display: none;">
+            <li class="nav-item" x-show="$store.sesion.activa && $store.sesion.usuario?.rol === 'admin'"
+              style="display: none;">
               <a class="nav-link" :class="{ 'active': ruta === '#admin' }" href="#admin">Administración</a>
             </li>
             <!-- [IA] fin -->
@@ -108,12 +110,14 @@
             <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_admin-responsive.md -->
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
               <div>
-                <h1 class="h4 mb-0"
-                  x-text="$store.sesion.activa ? 'Hola, ' + $store.sesion.nombre : 'Tu música'">Tu música</h1>
+                <h1 class="h4 mb-0" x-text="$store.sesion.activa ? 'Hola, ' + $store.sesion.nombre : 'Tu música'">Tu
+                  música</h1>
                 <p class="small text-secondary mb-0"
-                  x-text="$store.sesion.activa ? 'Tus playlists y el catálogo listo para reproducir.' : 'Explora el catálogo o inicia sesión para gestionar tus playlists.'"></p>
+                  x-text="$store.sesion.activa ? 'Tus playlists y el catálogo listo para reproducir.' : 'Explora el catálogo o inicia sesión para gestionar tus playlists.'">
+                </p>
               </div>
-              <a x-show="$store.sesion.activa" href="#vista_playlists" class="btn btn-outline-primary btn-sm" style="display: none;">
+              <a x-show="$store.sesion.activa" href="#vista_playlists" class="btn btn-outline-primary btn-sm"
+                style="display: none;">
                 Ver todas mis playlists
               </a>
             </div>
@@ -122,9 +126,11 @@
             <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
             <div class="mb-4">
               <template x-if="!$store.sesion.activa">
-                <div class="border border-secondary rounded p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div
+                  class="border border-secondary rounded p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
                   <span class="small text-secondary">Inicia sesión para ver tus playlists personalizadas.</span>
-                  <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                  <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalLogin">
                     Iniciar sesión
                   </button>
                 </div>
@@ -134,10 +140,12 @@
                 <div class="row row-cols-2 row-cols-md-4 g-3" id="grid_playlists">
                   <template x-for="pl in $store.playlists.lista.slice(0, 4)" :key="pl.id">
                     <div class="col">
-                      <a :href="'#playlist/' + pl.id" class="card h-100 shadow-sm text-decoration-none text-light tarjeta-playlist">
+                      <a :href="'#playlist/' + pl.id"
+                        class="card h-100 shadow-sm text-decoration-none text-light tarjeta-playlist">
                         <div class="card-body">
                           <h2 class="h6 card-title mb-1" x-text="pl.nombre"></h2>
-                          <p class="card-text small text-secondary mb-0" x-text="pl.descripcion || 'Sin descripción'"></p>
+                          <p class="card-text small text-secondary mb-0" x-text="pl.descripcion || 'Sin descripción'">
+                          </p>
                         </div>
                       </a>
                     </div>
@@ -151,10 +159,11 @@
             <div x-show="$store.catalogo.cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="!!$store.catalogo.error" :class="{'d-flex': $store.catalogo.error}" class="alert alert-danger justify-content-between align-items-center"
-              role="alert" style="display: none;">
+            <div x-show="!!$store.catalogo.error" :class="{'d-flex': $store.catalogo.error}"
+              class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
               <span x-text="$store.catalogo.error"></span>
-              <button type="button" class="btn btn-sm btn-outline-light" @click="$store.catalogo.cargar(true)">Reintentar</button>
+              <button type="button" class="btn btn-sm btn-outline-light"
+                @click="$store.catalogo.cargar(true)">Reintentar</button>
             </div>
             <!-- [IA] fin -->
 
@@ -179,8 +188,10 @@
                           @click="$store.reproductor.tocar(c)"
                           x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                       </td>
-                      <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
-                      <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
+                      <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id"
+                          x-text="c.titulo"></a></td>
+                      <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId"
+                          x-text="c.artista"></a></td>
                       <td x-text="c.album"></td>
                       <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
                     </tr>
@@ -211,7 +222,8 @@
               :class="{'d-flex': $store.playlists.error}"
               class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
               <span x-text="$store.playlists.error"></span>
-              <button type="button" class="btn btn-sm btn-outline-light" @click="$store.playlists.cargar()">Reintentar</button>
+              <button type="button" class="btn btn-sm btn-outline-light"
+                @click="$store.playlists.cargar()">Reintentar</button>
             </div>
 
             <!-- Vacío -->
@@ -229,13 +241,16 @@
                     <a :href="'#playlist/' + pl.id" class="card-body text-decoration-none text-light">
                       <h2 class="h6 card-title mb-1" x-text="pl.nombre"></h2>
                       <p class="card-text small text-secondary mb-2" x-text="pl.descripcion || 'Sin descripción'"></p>
-                      <span class="badge text-bg-secondary" x-text="(pl.totalCanciones ?? pl.cancionIds?.length ?? 0) + ' canciones'"></span>
+                      <span class="badge text-bg-secondary"
+                        x-text="(pl.totalCanciones ?? pl.cancionIds?.length ?? 0) + ' canciones'"></span>
                     </a>
                     <div class="card-footer bg-transparent border-secondary d-flex justify-content-end gap-2">
-                      <button type="button" class="btn btn-outline-secondary btn-sm" @click="$store.playlists.abrirEditar(pl)">
+                      <button type="button" class="btn btn-outline-secondary btn-sm"
+                        @click="$store.playlists.abrirEditar(pl)">
                         Editar
                       </button>
-                      <button type="button" class="btn btn-outline-danger btn-sm" @click="$store.playlists.pedirEliminar(pl)">
+                      <button type="button" class="btn btn-outline-danger btn-sm"
+                        @click="$store.playlists.pedirEliminar(pl)">
                         Eliminar
                       </button>
                     </div>
@@ -247,8 +262,7 @@
 
           <!-- VISTA: DETALLE PLAYLIST (#playlist/ID) -->
           <div id="vista_detalle_playlist" class="panel-contenido" x-show="ruta === '#playlist'"
-            x-effect="if (ruta === '#playlist' && param) $store.playlists.cargarDetalle(param)"
-            style="display: none;">
+            x-effect="if (ruta === '#playlist' && param) $store.playlists.cargarDetalle(param)" style="display: none;">
 
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
               <a href="#vista_playlists" class="btn btn-outline-secondary btn-sm">← Volver</a>
@@ -278,9 +292,9 @@
             <div x-show="!$store.playlists.cargandoDetalle && !!$store.playlists.errorDetalle"
               :class="{'d-flex': $store.playlists.errorDetalle}"
               class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
-              <span x-text="$store.playlists.statusDetalle === 404 ? 'Esta playlist no existe o no tienes acceso.' : $store.playlists.errorDetalle"></span>
-              <button type="button" class="btn btn-sm btn-outline-light"
-                x-show="$store.playlists.statusDetalle !== 404"
+              <span
+                x-text="$store.playlists.statusDetalle === 404 ? 'Esta playlist no existe o no tienes acceso.' : $store.playlists.errorDetalle"></span>
+              <button type="button" class="btn btn-sm btn-outline-light" x-show="$store.playlists.statusDetalle !== 404"
                 @click="$store.playlists.cargarDetalle(param)">Reintentar</button>
             </div>
 
@@ -290,7 +304,8 @@
                 <div class="p-4 bg-dark rounded border border-secondary mb-4">
                   <p class="text-uppercase small text-secondary mb-1">Playlist</p>
                   <h1 class="h4 mb-1" x-text="$store.playlists.actual.nombre"></h1>
-                  <p class="text-secondary small mb-0" x-text="$store.playlists.actual.descripcion || 'Sin descripción'"></p>
+                  <p class="text-secondary small mb-0"
+                    x-text="$store.playlists.actual.descripcion || 'Sin descripción'"></p>
                 </div>
 
                 <div x-show="!$store.playlists.actual.canciones.length"
@@ -320,15 +335,16 @@
                               @click="$store.reproductor.tocar(c)"
                               x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                           </td>
-                          <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
-                          <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
+                          <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id"
+                              x-text="c.titulo"></a></td>
+                          <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId"
+                              x-text="c.artista"></a></td>
                           <td x-text="c.album"></td>
                           <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
                           <td class="text-end">
                             <button type="button" class="btn btn-outline-danger btn-sm"
                               :disabled="$store.playlists.procesandoCancionId === c.id"
-                              @click="$store.playlists.quitarCancion(c.id)"
-                              :aria-label="'Quitar ' + c.titulo">
+                              @click="$store.playlists.quitarCancion(c.id)" :aria-label="'Quitar ' + c.titulo">
                               Quitar
                             </button>
                           </td>
@@ -344,7 +360,8 @@
           <!-- [IA] fin -->
 
           <!-- VISTA: EXPLORAR -->
-          <div id="vista_explorar" class="panel-contenido" x-show="ruta === '#vista_explorar'" x-data="explorar()" style="display: none;">
+          <div id="vista_explorar" class="panel-contenido" x-show="ruta === '#vista_explorar'" x-data="explorar()"
+            style="display: none;">
             <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
             <h1 class="h4 mb-3">Explorar géneros</h1>
             <div class="row row-cols-2 row-cols-md-4 g-3">
@@ -387,10 +404,11 @@
             <div x-show="$store.catalogo.cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="!!$store.catalogo.error" :class="{'d-flex': $store.catalogo.error}" class="alert alert-danger justify-content-between align-items-center"
-              role="alert" style="display: none;">
+            <div x-show="!!$store.catalogo.error" :class="{'d-flex': $store.catalogo.error}"
+              class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
               <span x-text="$store.catalogo.error"></span>
-              <button type="button" class="btn btn-sm btn-outline-light" @click="$store.catalogo.cargar(true)">Reintentar</button>
+              <button type="button" class="btn btn-sm btn-outline-light"
+                @click="$store.catalogo.cargar(true)">Reintentar</button>
             </div>
             <div x-show="$store.catalogo.cargado && !filtradas.length"
               class="border border-secondary rounded p-4 text-center text-muted" style="display: none;">
@@ -420,8 +438,10 @@
                             @click="$store.reproductor.tocar(c)"
                             x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                         </td>
-                        <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
-                        <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId" x-text="c.artista"></a></td>
+                        <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id"
+                            x-text="c.titulo"></a></td>
+                        <td><a class="link-secondary text-decoration-none" :href="'#artista/' + c.artistaId"
+                            x-text="c.artista"></a></td>
                         <td x-text="c.album"></td>
                         <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
                       </tr>
@@ -445,20 +465,22 @@
           <div id="vista_cancion" class="panel-contenido" x-show="ruta === '#cancion'" x-data="detalleCancion()"
             x-effect="if (ruta === '#cancion' && param) cargar(param)" style="display: none;">
             <a href="#vista_musica" class="btn btn-outline-secondary btn-sm mb-3">← Volver</a>
-            
+
             <!-- [IA] inicio ia/2026-11-11_mvtiasfelipe69_html_2.md -->
             <div x-show="cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="!cargando && !!error" :class="{'d-flex': error}" class="alert alert-danger justify-content-between align-items-center"
-              role="alert" style="display: none;">
+            <div x-show="!cargando && !!error" :class="{'d-flex': error}"
+              class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
               <span x-text="status === 404 ? 'Esta canción no existe.' : error"></span>
-              <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404" @click="cargar(param)">Reintentar</button>
+              <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404"
+                @click="cargar(param)">Reintentar</button>
             </div>
-            
+
             <div class="row g-4 align-items-end" x-show="cancion" style="display: none;">
               <div class="col-12 col-md-4">
-                <div id="cancion_portada" class="d-flex align-items-center justify-content-center rounded shadow display-1 fw-bold text-white"
+                <div id="cancion_portada"
+                  class="d-flex align-items-center justify-content-center rounded shadow display-1 fw-bold text-white"
                   style="aspect-ratio: 1 / 1;" :style="'background:' + cancion?.color" role="img"
                   :aria-label="'Portada de ' + cancion?.titulo" x-text="cancion?.titulo.charAt(0)"></div>
               </div>
@@ -469,7 +491,8 @@
                   <a class="link-light" :href="'#artista/' + cancion?.artistaId" x-text="cancion?.artista"></a>
                 </p>
                 <p class="small text-secondary mb-3" id="cancion_meta"
-                  x-text="cancion ? cancion.album + ' · ' + cancion.genero + ' · ' + cancion.anio + ' · ' + $store.catalogo.fmt(cancion.duracion) : ''"></p>
+                  x-text="cancion ? cancion.album + ' · ' + cancion.genero + ' · ' + cancion.anio + ' · ' + $store.catalogo.fmt(cancion.duracion) : ''">
+                </p>
                 <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_reproductor-alpine.md -->
                 <button type="button" class="btn btn-primary" @click="$store.reproductor.tocar(cancion)"
                   x-text="$store.reproductor.estaSonando(cancion?.id) ? '⏸ Pausar' : '▶ Reproducir'"></button>
@@ -487,16 +510,18 @@
             <div x-show="cargando" class="text-center py-5">
               <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
             </div>
-            <div x-show="!cargando && !!error" :class="{'d-flex': error}" class="alert alert-danger justify-content-between align-items-center"
-              role="alert" style="display: none;">
+            <div x-show="!cargando && !!error" :class="{'d-flex': error}"
+              class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
               <span x-text="status === 404 ? 'Este artista no existe.' : error"></span>
-              <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404" @click="cargar(param)">Reintentar</button>
+              <button type="button" class="btn btn-sm btn-outline-light" x-show="status !== 404"
+                @click="cargar(param)">Reintentar</button>
             </div>
             <template x-if="artista">
               <div>
                 <div class="row g-4 align-items-end mb-4">
                   <div class="col-12 col-md-3">
-                    <div class="d-flex align-items-center justify-content-center rounded-circle shadow display-1 fw-bold text-white"
+                    <div
+                      class="d-flex align-items-center justify-content-center rounded-circle shadow display-1 fw-bold text-white"
                       style="aspect-ratio: 1 / 1;" :style="'background:' + artista.color" role="img"
                       :aria-label="'Imagen de ' + artista.nombre" x-text="artista.nombre.charAt(0)"></div>
                   </div>
@@ -505,7 +530,8 @@
                     <h1 class="display-6 fw-bold mb-2" x-text="artista.nombre"></h1>
                     <p class="mb-2" x-text="artista.bio"></p>
                     <p class="small text-secondary mb-0"
-                      x-text="artista.genero + ' · ' + artista.pais + ' · ' + artista.oyentes.toLocaleString('es-CL') + ' oyentes mensuales'"></p>
+                      x-text="artista.genero + ' · ' + artista.pais + ' · ' + artista.oyentes.toLocaleString('es-CL') + ' oyentes mensuales'">
+                    </p>
                   </div>
                 </div>
                 <h2 class="h5 mb-3">Canciones</h2>
@@ -532,7 +558,8 @@
                               @click="$store.reproductor.tocar(c)"
                               x-text="$store.reproductor.estaSonando(c.id) ? '⏸' : '▶'"></button>
                           </td>
-                          <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id" x-text="c.titulo"></a></td>
+                          <td class="fw-semibold"><a class="link-light text-decoration-none" :href="'#cancion/' + c.id"
+                              x-text="c.titulo"></a></td>
                           <td x-text="c.artista"></td>
                           <td x-text="c.album"></td>
                           <td class="text-end" x-text="$store.catalogo.fmt(c.duracion)"></td>
@@ -561,7 +588,8 @@
                   <div class="card h-100">
                     <div class="card-body">
                       <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0"
+                        <div
+                          class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0"
                           style="width: 56px; height: 56px;" aria-hidden="true" x-text="iniciales"></div>
                         <div class="text-truncate">
                           <h2 class="h5 mb-0" id="perfil_nombre" x-text="usuario.nombre"></h2>
@@ -572,7 +600,8 @@
                       <dl class="row small mb-4">
                         <dt class="col-5 text-secondary fw-normal">Plan</dt>
                         <dd class="col-7">
-                          <span class="badge" :class="usuario.plan === 'premium' ? 'text-bg-warning' : 'text-bg-secondary'"
+                          <span class="badge"
+                            :class="usuario.plan === 'premium' ? 'text-bg-warning' : 'text-bg-secondary'"
                             x-text="usuario.plan === 'premium' ? 'Premium' : 'Gratis'"></span>
                         </dd>
                         <dt class="col-5 text-secondary fw-normal">Rol</dt>
@@ -590,10 +619,10 @@
                             @input="errorNombre = ''; exito = ''">
                           <div class="invalid-feedback" x-text="errorNombre"></div>
                         </div>
-                        <div class="alert alert-danger py-2 small" role="alert" id="perfil_error"
-                          x-show="errorServidor" x-text="errorServidor" style="display: none;"></div>
-                        <div class="alert alert-success py-2 small" role="status" id="perfil_exito"
-                          x-show="exito" x-text="exito" style="display: none;"></div>
+                        <div class="alert alert-danger py-2 small" role="alert" id="perfil_error" x-show="errorServidor"
+                          x-text="errorServidor" style="display: none;"></div>
+                        <div class="alert alert-success py-2 small" role="status" id="perfil_exito" x-show="exito"
+                          x-text="exito" style="display: none;"></div>
                         <button type="submit" class="btn btn-primary" id="btn_guardar_perfil" :disabled="enviando">
                           <span class="spinner-border spinner-border-sm me-1" x-show="enviando" aria-hidden="true"
                             style="display: none;"></span>
@@ -617,7 +646,8 @@
                           <span class="badge text-bg-warning ms-2" x-show="simuladorActivo">activo</span>
                         </button>
                       </h3>
-                      <div id="configSimulador" class="accordion-collapse collapse show" data-bs-parent="#acordeonConfig">
+                      <div id="configSimulador" class="accordion-collapse collapse show"
+                        data-bs-parent="#acordeonConfig">
                         <div class="accordion-body">
                           <p class="small text-secondary">
                             Cambia cómo responde <code>js/api.js</code> en todas las vistas. Se guarda en
@@ -666,7 +696,8 @@
                           </p>
                           <button type="button" class="btn btn-outline-danger btn-sm" id="btn_restablecer"
                             x-show="!confirmando" @click="confirmando = true">Restablecer datos de prueba</button>
-                          <div class="d-flex flex-wrap align-items-center gap-2" x-show="confirmando" style="display: none;">
+                          <div class="d-flex flex-wrap align-items-center gap-2" x-show="confirmando"
+                            style="display: none;">
                             <span class="small">¿Seguro? Esto no se puede deshacer.</span>
                             <button type="button" class="btn btn-danger btn-sm" id="btn_confirmar_restablecer"
                               @click="restablecer()">Sí, restablecer</button>
@@ -704,7 +735,8 @@
                 </div>
 
                 <div x-show="!cargando && !!error" :class="{'d-flex': error}"
-                  class="alert alert-danger justify-content-between align-items-center" role="alert" style="display: none;">
+                  class="alert alert-danger justify-content-between align-items-center" role="alert"
+                  style="display: none;">
                   <span x-text="error"></span>
                   <button type="button" class="btn btn-sm btn-outline-light" @click="cargar()">Reintentar</button>
                 </div>
@@ -773,8 +805,7 @@
         <button class="btn btn-sm btn-light" id="btn_alternar_reproductor" type="button"
           :disabled="!$store.reproductor.actual"
           :aria-label="$store.reproductor.reproduciendo ? 'Pausar' : 'Reproducir'"
-          @click="$store.reproductor.alternar()"
-          x-text="$store.reproductor.reproduciendo ? '⏸' : '▶'"></button>
+          @click="$store.reproductor.alternar()" x-text="$store.reproductor.reproduciendo ? '⏸' : '▶'"></button>
       </div>
 
       <div class="d-none d-md-flex align-items-center gap-2 text-secondary small">
@@ -782,10 +813,8 @@
         <label for="reproductor_progreso" class="visually-hidden">Progreso de reproducción</label>
         <input type="range" class="form-range" id="reproductor_progreso" min="0"
           :max="$store.reproductor.actual ? $store.reproductor.actual.duracion : 100"
-          :value="$store.reproductor.progreso"
-          :disabled="!$store.reproductor.actual"
-          @input="$store.reproductor.buscarTiempo($event.target.value)"
-          style="width: 150px;">
+          :value="$store.reproductor.progreso" :disabled="!$store.reproductor.actual"
+          @input="$store.reproductor.buscarTiempo($event.target.value)" style="width: 150px;">
         <span id="reproductor_duracion"
           x-text="$store.reproductor.actual ? $store.catalogo.fmt($store.reproductor.actual.duracion) : '0:00'">0:00</span>
       </div>
@@ -795,7 +824,8 @@
 
   <!-- [IA] inicio · ia/2026-11-13_mvtiasfelipe69_playlists-vistas.md -->
   <!-- MODAL: CREAR / EDITAR PLAYLIST -->
-  <div class="modal fade" id="modalFormPlaylist" tabindex="-1" aria-labelledby="modalFormPlaylistLabel" aria-hidden="true">
+  <div class="modal fade" id="modalFormPlaylist" tabindex="-1" aria-labelledby="modalFormPlaylistLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -807,8 +837,7 @@
           <form novalidate @submit.prevent="$store.playlists.guardar()">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="inputNombrePlaylist" placeholder="Nombre" maxlength="40"
-                x-model="$store.playlists.form.nombre"
-                :class="{ 'is-invalid': $store.playlists.form.errorNombre }"
+                x-model="$store.playlists.form.nombre" :class="{ 'is-invalid': $store.playlists.form.errorNombre }"
                 :disabled="$store.playlists.form.enviando"
                 @input="$store.playlists.form.errorNombre = ''; $store.playlists.form.errorServidor = ''">
               <label for="inputNombrePlaylist">Nombre de la playlist</label>
@@ -816,18 +845,18 @@
             </div>
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="inputDescPlaylist" placeholder="Descripción" maxlength="100"
-                x-model="$store.playlists.form.descripcion"
-                :disabled="$store.playlists.form.enviando">
+                x-model="$store.playlists.form.descripcion" :disabled="$store.playlists.form.enviando">
               <label for="inputDescPlaylist">Descripción breve (opcional)</label>
             </div>
 
-            <div class="alert alert-danger py-2 small" role="alert"
-              x-show="$store.playlists.form.errorServidor"
+            <div class="alert alert-danger py-2 small" role="alert" x-show="$store.playlists.form.errorServidor"
               x-text="$store.playlists.form.errorServidor" style="display: none;"></div>
 
             <button type="submit" class="btn btn-primary w-100" :disabled="$store.playlists.form.enviando">
-              <span x-show="$store.playlists.form.enviando" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-              <span x-text="$store.playlists.form.enviando ? 'Guardando…' : ($store.playlists.form.modo === 'crear' ? 'Crear' : 'Guardar cambios')"></span>
+              <span x-show="$store.playlists.form.enviando" class="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"></span>
+              <span
+                x-text="$store.playlists.form.enviando ? 'Guardando…' : ($store.playlists.form.modo === 'crear' ? 'Crear' : 'Guardar cambios')"></span>
             </button>
           </form>
         </div>
@@ -836,7 +865,8 @@
   </div>
 
   <!-- MODAL: CONFIRMAR ELIMINAR PLAYLIST -->
-  <div class="modal fade" id="modalEliminarPlaylist" tabindex="-1" aria-labelledby="modalEliminarPlaylistLabel" aria-hidden="true">
+  <div class="modal fade" id="modalEliminarPlaylist" tabindex="-1" aria-labelledby="modalEliminarPlaylistLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -844,12 +874,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <p class="mb-0">¿Seguro que quieres eliminar <strong x-text="$store.playlists.aEliminar?.nombre"></strong>? Esta acción no se puede deshacer.</p>
+          <p class="mb-0">¿Seguro que quieres eliminar <strong x-text="$store.playlists.aEliminar?.nombre"></strong>?
+            Esta acción no se puede deshacer.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" :disabled="$store.playlists.eliminando">Cancelar</button>
-          <button type="button" class="btn btn-danger" :disabled="$store.playlists.eliminando" @click="$store.playlists.confirmarEliminar()">
-            <span x-show="$store.playlists.eliminando" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+            :disabled="$store.playlists.eliminando">Cancelar</button>
+          <button type="button" class="btn btn-danger" :disabled="$store.playlists.eliminando"
+            @click="$store.playlists.confirmarEliminar()">
+            <span x-show="$store.playlists.eliminando" class="spinner-border spinner-border-sm me-1"
+              aria-hidden="true"></span>
             <span x-text="$store.playlists.eliminando ? 'Eliminando…' : 'Sí, eliminar'"></span>
           </button>
         </div>
@@ -858,7 +892,8 @@
   </div>
 
   <!-- MODAL: AÑADIR CANCIÓN DESDE CATÁLOGO -->
-  <div class="modal fade" id="modalAgregarCancion" tabindex="-1" aria-labelledby="modalAgregarCancionLabel" aria-hidden="true">
+  <div class="modal fade" id="modalAgregarCancion" tabindex="-1" aria-labelledby="modalAgregarCancionLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
@@ -868,8 +903,7 @@
         <div class="modal-body">
           <label for="buscarCancionPlaylist" class="visually-hidden">Buscar canción en el catálogo</label>
           <input type="search" id="buscarCancionPlaylist" class="form-control mb-3"
-            placeholder="Buscar por título o artista..."
-            x-model="$store.playlists.busquedaCancion">
+            placeholder="Buscar por título o artista..." x-model="$store.playlists.busquedaCancion">
 
           <div x-show="!$store.playlists.cancionesFiltradasModal.length" class="text-center text-secondary small py-3">
             No hay canciones disponibles para añadir.
@@ -877,10 +911,12 @@
 
           <ul class="list-group list-group-flush">
             <template x-for="c in $store.playlists.cancionesFiltradasModal" :key="c.id">
-              <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-light border-secondary px-0">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-light border-secondary px-0">
                 <div class="me-2 text-truncate">
                   <div class="fw-semibold text-truncate" x-text="c.titulo"></div>
-                  <div class="text-secondary small text-truncate" x-text="c.artista + ' • ' + $store.catalogo.fmt(c.duracion)"></div>
+                  <div class="text-secondary small text-truncate"
+                    x-text="c.artista + ' • ' + $store.catalogo.fmt(c.duracion)"></div>
                 </div>
                 <button class="btn btn-sm btn-outline-primary flex-shrink-0" type="button"
                   :disabled="$store.playlists.procesandoCancionId === c.id"
@@ -911,8 +947,8 @@
             <fieldset :disabled="enviando || exito !== ''">
               <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="loginCorreo" placeholder="nombre@correo.com"
-                  autocomplete="email" x-model="campos.correo" :class="clase('correo')"
-                  @blur="tocar('correo')" @input="revisar('correo')" aria-describedby="loginCorreoError">
+                  autocomplete="email" x-model="campos.correo" :class="clase('correo')" @blur="tocar('correo')"
+                  @input="revisar('correo')" aria-describedby="loginCorreoError">
                 <label for="loginCorreo">Correo electrónico</label>
                 <div class="invalid-feedback" id="loginCorreoError" x-text="errores.correo"></div>
               </div>
@@ -927,8 +963,8 @@
 
             <div class="alert alert-danger py-2 small" id="login_error" role="alert" x-show="errorGeneral"
               x-text="errorGeneral"></div>
-            <div class="alert alert-success py-2 small" id="login_exito" role="status" x-show="exito"
-              x-text="exito"></div>
+            <div class="alert alert-success py-2 small" id="login_exito" role="status" x-show="exito" x-text="exito">
+            </div>
 
             <button type="submit" class="btn btn-primary w-100" :disabled="enviando || exito !== ''">
               <span x-show="enviando" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
@@ -957,16 +993,16 @@
           <form id="form_registro" novalidate @submit.prevent="enviar()">
             <fieldset :disabled="enviando || exito !== ''">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="regNombre" placeholder="Nombre completo"
-                  autocomplete="name" x-model="campos.nombre" :class="clase('nombre')"
-                  @blur="tocar('nombre')" @input="revisar('nombre')" aria-describedby="regNombreError">
+                <input type="text" class="form-control" id="regNombre" placeholder="Nombre completo" autocomplete="name"
+                  x-model="campos.nombre" :class="clase('nombre')" @blur="tocar('nombre')" @input="revisar('nombre')"
+                  aria-describedby="regNombreError">
                 <label for="regNombre">Nombre completo</label>
                 <div class="invalid-feedback" id="regNombreError" x-text="errores.nombre"></div>
               </div>
               <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="regEmail" placeholder="nombre@correo.com"
-                  autocomplete="email" x-model="campos.correo" :class="clase('correo')"
-                  @blur="tocar('correo')" @input="revisar('correo')" aria-describedby="regEmailError">
+                  autocomplete="email" x-model="campos.correo" :class="clase('correo')" @blur="tocar('correo')"
+                  @input="revisar('correo')" aria-describedby="regEmailError">
                 <label for="regEmail">Correo electrónico</label>
                 <div class="invalid-feedback" id="regEmailError" x-text="errores.correo"></div>
               </div>
@@ -989,8 +1025,8 @@
 
             <div class="alert alert-danger py-2 small" id="registro_error" role="alert" x-show="errorGeneral"
               x-text="errorGeneral"></div>
-            <div class="alert alert-success py-2 small" id="registro_exito" role="status" x-show="exito"
-              x-text="exito"></div>
+            <div class="alert alert-success py-2 small" id="registro_exito" role="status" x-show="exito" x-text="exito">
+            </div>
 
             <button type="submit" class="btn btn-primary w-100" :disabled="enviando || exito !== ''">
               <span x-show="enviando" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
