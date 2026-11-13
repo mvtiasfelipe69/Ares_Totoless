@@ -1,8 +1,8 @@
 # Gestión de Playlists, Store de Sesión y Validación de Login
 **Fecha:** 2026-11-12
 **Integrante:** Carlos Cereceda (@carlitos1009-udp)
-**Herramienta y modelo:**ChatGPT 4o
-**Archivos afectados:** js/app.js (nuevo bloque de código centralizado), ia/prompts_carlos.txt (nuevo), ia/README.md (fila nueva)
+**Herramienta y modelo:** ChatGPT 4o
+**Archivos afectados:** js/app.js (nuevo bloque de código centralizado), ia/2026-11-12_carlitos1009-udp_playlists.md (nuevo ), ia/README.md (fila nueva)
 
 ## Objetivo
 Centralizar en `js/app.js` la lógica de sesión del usuario utilizando `localStorage` y un store global (`sessionStore`), implementar validación de correo mediante expresiones regulares (Regex) en el formulario de login, y desarrollar el CRUD completo (Crear, Leer, Editar, Eliminar y Agregar Canciones) para la gestión de playlists inyectando HTML dinámico y manejando eventos mediante Event Delegation.
